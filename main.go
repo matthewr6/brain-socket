@@ -29,11 +29,21 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    // server.On("connection", func(so socketio.Socket) {
-        
-    // })
+    server.On("connection", func(so socketio.Socket) {
+        so.Emit("connected", true)
+    })
     server.On("error", func(so socketio.Socket, err error) {
         log.Println("error:", err)
+    })
+    server.On("cycle", func(so socketio.Socket, msg int) {
+        for i := 0; i < msg; i++ {
+            myNet.Cycle()
+            so.Emit("cycle")
+        }
+    })
+    server.On("save", func(so socketio.Socket, msg string) {
+        myNet.SaveState(msg)
+        so.Emit("saved")
     })
 
     http.Handle("/socket.io/", server)
