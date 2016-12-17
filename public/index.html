@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js"></script>
+    </head>
+    <body>
+        testing
+        <script>
+            var socket = io();
+            socket.on('test1', function (data) {
+                console.log(data);
+                socket.emit('chat message', 'test');
+            });
+        </script>
+    </body>
+</html>
