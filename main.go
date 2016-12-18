@@ -5,10 +5,13 @@ import (
     "github.com/googollee/go-socket.io"
 
     "log"
+    "strconv"
     "net/http"
+    "encoding/json"
 )
 
 func main() {
+    frames := 0 // TODO - move this into a property on the Network struct
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
             Name:"eye",
@@ -31,23 +34,43 @@ func main() {
     }
     server.On("connection", func(so socketio.Socket) {
         so.Emit("connected", true)
+        outputs := make(map[string]float64)
+        for name, output := range myNet.Outputs {
+            outputs[name] = output.Value
+        }
+        jsonRep, _ := json.Marshal(outputs)
+        so.Emit("outputs", string(jsonRep))
+
+        // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
+        // sensors := make(map[string]float64)
+        // for name, sensor := range myNet.Sensors {
+        //     sensors[name] = sensor.Value
+        // }
+        // jsonRep, _ := json.Marshal(sensors)
+        // so.Emit("sensors", string(jsonRep))
     })
     server.On("error", func(so socketio.Socket, err error) {
         log.Println("error:", err)
     })
-    server.On("cycle", func(so socketio.Socket, msg int) {
-        for i := 0; i < msg; i++ {
+    server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool) {
+        log.Println("cycle")
+        // should I save before or after cycle?
+        for i := 0; i < cycles; i++ {
             myNet.Cycle()
+            if saveFrames {
+                myNet.DumpJSON(strconv.Itoa(frames))
+            }
+            frames++
             so.Emit("cycle")
         }
     })
-    server.On("save", func(so socketio.Socket, msg string) {
-        myNet.SaveState(msg)
+    server.On("save", func(so socketio.Socket, saveName string) {
+        myNet.SaveState(saveName)
         so.Emit("saved")
     })
 
     http.Handle("/socket.io/", server)
-    http.Handle("/", http.FileServer(http.Dir("./public")))
+    http.Handle("/", http.FileServer(http.Dir("./client/build")))
     log.Println("-- Serving localhost:3000 --")
     log.Fatal(http.ListenAndServe(":3000", nil))
 }

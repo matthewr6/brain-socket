@@ -1,4 +1,5 @@
 *.exe
 net_*
 *_state.json
-/node_modules/
+client/node_modules/*
+client/build/*
