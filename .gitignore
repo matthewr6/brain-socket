@@ -1,3 +1,4 @@
 *.exe
 net_*
 *_state.json
+/node_modules/
