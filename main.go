@@ -34,6 +34,7 @@ func main() {
     }
     server.On("connection", func(so socketio.Socket) {
         so.Emit("connected", true)
+        so.Emit("cycle", frames)
         outputs := make(map[string]float64)
         for name, output := range myNet.Outputs {
             outputs[name] = output.Value
@@ -53,7 +54,6 @@ func main() {
         log.Println("error:", err)
     })
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool) {
-        log.Println("cycle")
         // should I save before or after cycle?
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
@@ -61,7 +61,7 @@ func main() {
                 myNet.DumpJSON(strconv.Itoa(frames))
             }
             frames++
-            so.Emit("cycle")
+            so.Emit("cycle", frames)
         }
     })
     server.On("save", func(so socketio.Socket, saveName string) {
