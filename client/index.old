@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js"></script>
+        <script src="https://fb.me/react-15.0.0.js"></script>
+        <script src="https://fb.me/react-dom-15.0.0.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+        <script src="assets/js/components/outputs.js" type="text/babel"></script>
+    </head>
+    <body>
+        <button id="step">Step (0)</button>
+        <input id="amount" value="1" type="number" />
+        <button id="save">Save Current State</button>
+        <input id="savename" type="text" placeholder="File name" />
+        <input id="generate-frames" type="checkbox" />
+        <div id="outputs"></div>
+        <script type="text/babel">
+            ReactDOM.render(<Outputs/>, document.getElementById('outputs'));
+            var stepper = document.getElementById('step');
+            var stepCount = document.getElementById('amount');
+            var saveName = document.getElementById('savename');
+            var saveButton = document.getElementById('save');
+            var generateFrames = document.getElementById('generate-frames');
+
+            var steps = 0;
+            var mode = 'manual';
+
+            var socket = io();
+            var connected = false;
+            socket.on('connected', function(data) {
+                connected = data;
+            });
+            socket.on('outputs', function(data) {
+                console.log(data);
+            });
+
+            stepper.addEventListener('click', function() {
+                if (connected) {
+                    var amount = parseInt(stepCount.value);
+                    socket.emit('cycle', amount, generateFrames.checked);
+                }
+            });
+            saveButton.addEventListener('click', function() {
+                if (connected) {
+                    socket.emit('save', saveName.value);
+                }
+            });
+            socket.on('cycle', function() {
+                steps++;
+                stepper.textContent = 'Step (' + steps + ')';
+            });
+        </script>
+    </body>
+</html>
