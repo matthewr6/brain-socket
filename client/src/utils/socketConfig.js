@@ -2,6 +2,7 @@ import io from 'socket.io-client';
 
 import { socketConnected } from '../actions/socketActions';
 import { cycled } from '../actions/actions';
+import { updateOutputs } from '../actions/outputActions';
 
 function initializeListeners(socket, dispatch) {
   socket.on('connect', () => {
@@ -14,8 +15,10 @@ function initializeListeners(socket, dispatch) {
     console.error(error);
   });
 
+  socket.on('outputs', (outputs) => {
+    dispatch(updateOutputs(JSON.parse(outputs)));
+  });
   socket.on('cycle', (frames) => {
-    console.log(frames);
     dispatch(cycled(frames));
   });
 }

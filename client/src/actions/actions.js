@@ -8,7 +8,7 @@ export function step(amount, generateFrames) {
 }
 
 export function cycled(frames) {
-    return { type: CYCLED, frames: frames } // todo - sync server frames with interface frames
+    return { type: CYCLED, frames: frames }
 }
 
 export function saveState(saveName) {

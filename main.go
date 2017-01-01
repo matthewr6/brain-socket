@@ -62,6 +62,13 @@ func main() {
             }
             frames++
             so.Emit("cycle", frames)
+
+            outputs := make(map[string]float64)
+            for name, output := range myNet.Outputs {
+                outputs[name] = output.Value
+            }
+            jsonRep, _ := json.Marshal(outputs)
+            so.Emit("outputs", string(jsonRep))
         }
     })
     server.On("save", func(so socketio.Socket, saveName string) {
