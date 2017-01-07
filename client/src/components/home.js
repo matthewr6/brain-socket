@@ -20,7 +20,7 @@ class Home extends Component {
     this.changeSaveName = this.changeSaveName.bind(this);
   }
   step() {
-    this.props.step(this.state.stepIncrement, this.state.generateFrames);
+    this.props.step(this.state.stepIncrement, this.state.saveFrames);
   }
   saveState() {
     this.props.saveState(this.state.saveName);
