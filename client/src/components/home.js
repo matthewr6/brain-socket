@@ -18,6 +18,7 @@ class Home extends Component {
     this.changeIncrement = this.changeIncrement.bind(this);
     this.toggleFrameSave = this.toggleFrameSave.bind(this);
     this.changeSaveName = this.changeSaveName.bind(this);
+    this.renderOutputs = this.renderOutputs.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
@@ -34,6 +35,9 @@ class Home extends Component {
   changeSaveName(e) {
     this.setState({saveName: e.target.value});
   }
+  renderOutputs() {
+
+  }
   render() {
     return (
       <div>
@@ -42,6 +46,7 @@ class Home extends Component {
         <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
         <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
         <input type="number" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+        {this.renderOutputs()}
       </div>
     );
   }

@@ -7,7 +7,6 @@ import (
     "log"
     "strconv"
     "net/http"
-    "encoding/json"
 )
 
 const MAIN_ROOM = "server"
@@ -16,6 +15,22 @@ func emitToAll(so socketio.Socket, event string, data ...interface{}) {
     so.BroadcastTo(MAIN_ROOM, event, data)
     so.Emit(event, data)
 }
+
+// this loop is more suitable for sensors
+// outputs := [](map[string]string){}
+//             outputsUsed := make(map[string]bool)
+//             for name, _ := range myNet.Outputs {
+//                 baseName := name[0:len(name)-2]
+//                 if _, exists := outputsUsed[baseName]; !exists {
+//                     outputs = append(outputs, map[string]string{
+//                         "name": baseName,
+//                         "valueOne": strconv.FormatFloat(myNet.Outputs[fmt.Sprintf("%v-0", baseName)].Value, 'f', -1, 64),
+//                         "valueTwo": strconv.FormatFloat(myNet.Outputs[fmt.Sprintf("%v-1", baseName)].Value, 'f', -1, 64),
+//                     })
+//                     outputsUsed[baseName] = true
+//                 }
+//             }
+//             jsonRep, _ := json.Marshal(outputs)
 
 func main() {
     frames := 0 // TODO - move this into a property on the Network struct
@@ -43,12 +58,9 @@ func main() {
         so.Join(MAIN_ROOM)
         so.Emit("connected", true)
         so.Emit("cycle", frames)
-        outputs := make(map[string]float64)
-        for name, output := range myNet.Outputs {
-            outputs[name] = output.Value
-        }
-        jsonRep, _ := json.Marshal(outputs)
-        so.Emit("outputs", string(jsonRep))
+
+        // jsonRep, _ := json.Marshal(outputs)
+        so.Emit("outputs", SerializeOutputs(myNet))
 
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
@@ -72,12 +84,8 @@ func main() {
 
             emitToAll(so, "cycle", frames)
 
-            outputs := make(map[string]float64)
-            for name, output := range myNet.Outputs {
-                outputs[name] = output.Value
-            }
-            jsonRep, _ := json.Marshal(outputs)
-            emitToAll(so, "outputs", string(jsonRep))
+            outputs := SerializeOutputs(myNet)
+            emitToAll(so, "outputs", outputs)
         }
     })
     server.On("save", func(so socketio.Socket, saveName string) {

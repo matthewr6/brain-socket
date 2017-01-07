@@ -16,7 +16,7 @@ function initializeListeners(socket, dispatch) {
   });
 
   socket.on('outputs', (outputs) => {
-    dispatch(updateOutputs(JSON.parse(outputs)));
+    dispatch(updateOutputs(outputs));
   });
   socket.on('cycle', (frames) => {
     dispatch(cycled(frames));
