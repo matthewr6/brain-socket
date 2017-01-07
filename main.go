@@ -10,6 +10,13 @@ import (
     "encoding/json"
 )
 
+const MAIN_ROOM = "server"
+
+func emitToAll(so socketio.Socket, event string, data ...interface{}) {
+    so.BroadcastTo(MAIN_ROOM, event, data)
+    so.Emit(event, data)
+}
+
 func main() {
     frames := 0 // TODO - move this into a property on the Network struct
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
@@ -33,6 +40,7 @@ func main() {
         log.Fatal(err)
     }
     server.On("connection", func(so socketio.Socket) {
+        so.Join(MAIN_ROOM)
         so.Emit("connected", true)
         so.Emit("cycle", frames)
         outputs := make(map[string]float64)
@@ -61,19 +69,20 @@ func main() {
                 myNet.DumpJSON(strconv.Itoa(frames))
             }
             frames++
-            so.Emit("cycle", frames)
+
+            emitToAll(so, "cycle", frames)
 
             outputs := make(map[string]float64)
             for name, output := range myNet.Outputs {
                 outputs[name] = output.Value
             }
             jsonRep, _ := json.Marshal(outputs)
-            so.Emit("outputs", string(jsonRep))
+            emitToAll(so, "outputs", string(jsonRep))
         }
     })
     server.On("save", func(so socketio.Socket, saveName string) {
         myNet.SaveState(saveName)
-        so.Emit("saved")
+        emitToAll(so, "saved")
     })
 
     http.Handle("/socket.io/", server)
