@@ -48,6 +48,19 @@ func main() {
                 }
             },
         },
+        brain.SensorConstructor{
+            Name:"ear",
+            R: 1,
+            Count: 9,
+            Plane: "y",
+            Center: [3]int{8, 8, 12},
+            OutputCount: 3,
+            InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
+                for _, node := range nodes {
+                    node.Value = 1
+                }
+            },
+        },
     })
 
     server, err := socketio.NewServer(nil)

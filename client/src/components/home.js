@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { step, saveState, toggleAutorun } from '../actions/actions';
+import Outputs from './outputs';
 
 class Home extends Component {
   constructor(props) {
@@ -18,7 +19,6 @@ class Home extends Component {
     this.changeIncrement = this.changeIncrement.bind(this);
     this.toggleFrameSave = this.toggleFrameSave.bind(this);
     this.changeSaveName = this.changeSaveName.bind(this);
-    this.renderOutputs = this.renderOutputs.bind(this);
     this.toggleAutorun = this.toggleAutorun.bind(this);
   }
   step() {
@@ -36,25 +36,6 @@ class Home extends Component {
   changeSaveName(e) {
     this.setState({saveName: e.target.value});
   }
-  renderOutputs() {
-    let bases = Object.keys(this.props.outputs).sort();
-    return bases.map(name => {
-      return (
-        <div key={`output-${name}`}>
-          <div>{name}</div>
-          <div>
-            <div>
-              {this.props.outputs[name].left.map(val => <div>{val}</div>)}
-            </div>
-            <br />
-            <div>
-              {this.props.outputs[name].right.map(val => <div>{val}</div>)}
-            </div>
-          </div>
-        </div>
-      );
-    });
-  }
   toggleAutorun(e) {
     this.props.toggleAutorun(e.target.checked);
   }
@@ -68,7 +49,7 @@ class Home extends Component {
         <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
         <input type="number" value={this.state.stepIncrement} onChange={this.changeIncrement} />
         <div>
-          {this.renderOutputs()}
+          {<Outputs />}
         </div>
       </div>
     );
