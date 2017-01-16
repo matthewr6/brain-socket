@@ -19,6 +19,13 @@ export function saveState(saveName) {
     }
 }
 
+export function loadState(loadName) {
+    return function(dispatch, getState) {
+        let { socket } = getState();
+        socket.socket.emit('load', loadName);
+    }
+}
+
 export function toggleAutorun(autorun) {
     return function(dispatch, getState) {
         let { socket } = getState();

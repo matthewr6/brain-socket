@@ -11,7 +11,7 @@ import (
 
 const MAIN_ROOM = "server"
 
-func emitToAll(so socketio.Socket, event string, data ...interface{}) {
+func EmitToAll(so socketio.Socket, event string, data ...interface{}) {
     so.BroadcastTo(MAIN_ROOM, event, data...)
     so.Emit(event, data...)
 }
@@ -31,6 +31,12 @@ func emitToAll(so socketio.Socket, event string, data ...interface{}) {
 //                 }
 //             }
 //             jsonRep, _ := json.Marshal(outputs)
+
+/*
+sensor stuff
+array of names?  can generate left/right on client.
+also whether to stimulate maybe?  would require change in package.
+*/
 
 func main() {
     frames := 0 // TODO - move this into a property on the Network struct
@@ -74,6 +80,7 @@ func main() {
 
         // jsonRep, _ := json.Marshal(outputs)
         so.Emit("outputs", SerializeOutputs(myNet))
+        so.Emit("sensors", SerializeSensors(myNet))
 
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
@@ -95,18 +102,35 @@ func main() {
             }
             frames++
 
-            emitToAll(so, "cycle", frames)
+            EmitToAll(so, "cycle", frames)
 
             outputs := SerializeOutputs(myNet)
-            emitToAll(so, "outputs", outputs)
+            EmitToAll(so, "outputs", outputs)
         }
+    })
+    server.On("autorun", func(so socketio.Socket, autorun bool) {
+        EmitToAll(so, "autorun", autorun)
     })
     server.On("save", func(so socketio.Socket, saveName string) {
         myNet.SaveState(saveName)
-        emitToAll(so, "saved")
+        EmitToAll(so, "saved")
     })
-    server.On("autorun", func(so socketio.Socket, autorun bool) {
-        emitToAll(so, "autorun", autorun)
+    server.On("load", func(so socketio.Socket, loadName string) {
+        myNet = brain.LoadState(loadName)
+        // quick hack because the sensors are weird
+        // myNet.Sensors = make(map[string]*brain.Sensor)
+        for _, sensor := range myNet.Sensors {
+            sensor.In = func(nodes []*brain.Node, influences map[string]*brain.Output) {
+                for _, node := range nodes {
+                    node.Value = 1
+                }
+            }
+        }
+        // myNet.Outputs = make(map[string]*brain.Output)
+        frames = 0
+        EmitToAll(so, "cycle", frames)
+        EmitToAll(so, "outputs", SerializeOutputs(myNet))
+        EmitToAll(so, "sensors", SerializeSensors(myNet))
     })
 
     http.Handle("/socket.io/", server)

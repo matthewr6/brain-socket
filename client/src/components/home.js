@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { step, saveState, toggleAutorun } from '../actions/actions';
+import { step, saveState, loadState, toggleAutorun } from '../actions/actions';
 import Outputs from './outputs';
 
 class Home extends Component {
@@ -11,6 +11,7 @@ class Home extends Component {
     super(props);
     this.state = {
       saveName: '',
+      loadName: '',
       saveFrames: false,
       stepIncrement: 1
     };
@@ -19,13 +20,18 @@ class Home extends Component {
     this.changeIncrement = this.changeIncrement.bind(this);
     this.toggleFrameSave = this.toggleFrameSave.bind(this);
     this.changeSaveName = this.changeSaveName.bind(this);
-    this.toggleAutorun = this.toggleAutorun.bind(this);
+    this.autorunToggle = this.autorunToggle.bind(this);
+    this.loadState = this.loadState.bind(this);
+    this.changeLoadName = this.changeLoadName.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
   }
   saveState() {
     this.props.saveState(this.state.saveName);
+  }
+  loadState() {
+    this.props.loadState(this.state.loadName); // todo - have same input for load/save name?
   }
   changeIncrement(e) {
     this.setState({stepIncrement: parseInt(e.target.value)});
@@ -36,18 +42,25 @@ class Home extends Component {
   changeSaveName(e) {
     this.setState({saveName: e.target.value});
   }
-  toggleAutorun(e) {
-    this.props.toggleAutorun(e.target.checked);
+  changeLoadName(e) {
+    this.setState({loadName: e.target.value});
+  }
+  autorunToggle(e) {
+    this.props.autorunToggle(e.target.checked);
   }
   render() {
     return (
       <div>
         <button onClick={this.step}>Step ({this.props.status.frames})</button>
-        <input type="checkbox" checked={this.props.status.autorun} onChange={this.toggleAutorun} />
+        Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
+        Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
+        Cycle increment:  <input type="number" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+        
         <button onClick={this.saveState}>Save</button>
-        <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
-        <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
-        <input type="number" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+        Save name:  <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
+
+        <button onClick={this.loadState}>Load</button>
+        Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
         <div>
           {<Outputs />}
         </div>
@@ -64,7 +77,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ step, saveState, toggleAutorun }, dispatch);
+  return bindActionCreators({ step, saveState, loadState, toggleAutorun }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

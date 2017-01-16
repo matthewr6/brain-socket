@@ -7,6 +7,14 @@ import (
     "strings"
 )
 
+func SerializeSensors(net *brain.Network) []string {
+    sensorNames := []string{}
+    for name := range net.Sensors {
+        sensorNames = append(sensorNames, name)
+    }
+    return sensorNames
+}
+
 func SerializeOutputs(net *brain.Network) map[string]map[string][]float64 {
     // todo possibly refactor brain structure to allow for references from sensor to brain?
     outputSubLevel := map[string][]float64{}
