@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { step, saveState } from '../actions/actions';
+import { step, saveState, toggleAutorun } from '../actions/actions';
 
 class Home extends Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class Home extends Component {
     this.toggleFrameSave = this.toggleFrameSave.bind(this);
     this.changeSaveName = this.changeSaveName.bind(this);
     this.renderOutputs = this.renderOutputs.bind(this);
+    this.toggleAutorun = this.toggleAutorun.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
@@ -38,10 +39,14 @@ class Home extends Component {
   renderOutputs() {
 
   }
+  toggleAutorun(e) {
+    this.props.toggleAutorun(e.target.checked);
+  }
   render() {
     return (
       <div>
-        <button onClick={this.step}>Step ({this.props.status})</button>
+        <button onClick={this.step}>Step ({this.props.status.frames})</button>
+        <input type="checkbox" checked={this.props.status.autorun} onChange={this.toggleAutorun} />
         <button onClick={this.saveState}>Save</button>
         <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
         <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
@@ -60,7 +65,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ step, saveState }, dispatch);
+  return bindActionCreators({ step, saveState, toggleAutorun }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

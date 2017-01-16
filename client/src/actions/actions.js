@@ -1,4 +1,5 @@
 export const CYCLED = 'CYCLED';
+export const AUTORUN_TOGGLED = 'AUTORUN_TOGGLED';
 
 export function step(amount, generateFrames) {
     return function(dispatch, getState) {
@@ -16,4 +17,15 @@ export function saveState(saveName) {
         let { socket } = getState();
         socket.socket.emit('save', saveName);
     }
+}
+
+export function toggleAutorun(autorun) {
+    return function(dispatch, getState) {
+        let { socket } = getState();
+        socket.socket.emit('autorun', autorun);
+    }
+}
+
+export function autorunToggled(autorun) {
+    return { type: AUTORUN_TOGGLED, autorun: autorun };
 }

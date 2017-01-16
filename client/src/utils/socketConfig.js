@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 import { socketConnected } from '../actions/socketActions';
-import { cycled } from '../actions/actions';
+import { cycled, autorunToggled } from '../actions/actions';
 import { updateOutputs } from '../actions/outputActions';
 
 function initializeListeners(socket, dispatch) {
@@ -20,6 +20,9 @@ function initializeListeners(socket, dispatch) {
   });
   socket.on('cycle', (frames) => {
     dispatch(cycled(frames));
+  });
+  socket.on('autorun', (autorun) => {
+    dispatch(autorunToggled(autorun));
   });
 }
 
