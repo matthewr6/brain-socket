@@ -9,8 +9,13 @@ import (
 
 func SerializeSensors(net *brain.Network) []string {
     sensorNames := []string{}
+    sensorsUsed := make(map[string]bool)
     for name := range net.Sensors {
-        sensorNames = append(sensorNames, name)
+        baseName := name[0:len(name)-4]
+        if _, exists := sensorsUsed[baseName]; !exists {
+            sensorNames = append(sensorNames, baseName)
+            sensorsUsed[baseName] = true
+        }
     }
     return sensorNames
 }

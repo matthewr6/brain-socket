@@ -117,8 +117,6 @@ func main() {
     })
     server.On("load", func(so socketio.Socket, loadName string) {
         myNet = brain.LoadState(loadName)
-        // quick hack because the sensors are weird
-        // myNet.Sensors = make(map[string]*brain.Sensor)
         for _, sensor := range myNet.Sensors {
             sensor.In = func(nodes []*brain.Node, influences map[string]*brain.Output) {
                 for _, node := range nodes {
@@ -126,7 +124,6 @@ func main() {
                 }
             }
         }
-        // myNet.Outputs = make(map[string]*brain.Output)
         frames = 0
         EmitToAll(so, "cycle", frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
