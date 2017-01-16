@@ -12,8 +12,8 @@ import (
 const MAIN_ROOM = "server"
 
 func emitToAll(so socketio.Socket, event string, data ...interface{}) {
-    so.BroadcastTo(MAIN_ROOM, event, data)
-    so.Emit(event, data)
+    so.BroadcastTo(MAIN_ROOM, event, data...)
+    so.Emit(event, data...)
 }
 
 // this loop is more suitable for sensors
@@ -41,7 +41,7 @@ func main() {
             Count: 9,
             Plane: "y",
             Center: [3]int{8, 0, 12},
-            OutputCount: 2,
+            OutputCount: 5,
             InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
                 for _, node := range nodes {
                     node.Value = 1
@@ -91,6 +91,9 @@ func main() {
     server.On("save", func(so socketio.Socket, saveName string) {
         myNet.SaveState(saveName)
         emitToAll(so, "saved")
+    })
+    server.On("autorun", func(so socketio.Socket, autorun bool) {
+        emitToAll(so, "autorun", autorun)
     })
 
     http.Handle("/socket.io/", server)
