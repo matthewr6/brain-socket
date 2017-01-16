@@ -1,6 +1,6 @@
 import { SENSORS_UPDATED } from '../actions/sensorActions';
 
-const INITIAL_STATE = {}
+const INITIAL_STATE = [];
 
 export default function(state=INITIAL_STATE, action) {
   switch(action.type) {

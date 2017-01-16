@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import { step, saveState, loadState, toggleAutorun } from '../actions/actions';
 import Outputs from './outputs';
+import Sensors from './sensors';
 
 class Home extends Component {
   constructor(props) {
@@ -62,7 +63,10 @@ class Home extends Component {
         <button onClick={this.loadState}>Load</button>
         Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
         <div>
-          {<Outputs />}
+          <div>Outputs</div>
+          <Outputs />
+          <div>Sensors</div>
+          <Sensors />
         </div>
       </div>
     );
@@ -71,8 +75,7 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    status: state.status,
-    outputs: state.outputs
+    status: state.status
   };
 }
 
