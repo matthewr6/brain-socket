@@ -39,6 +39,7 @@ also whether to stimulate maybe?  would require change in package.
 */
 
 func main() {
+    sensorStatuses := make(map[string]bool)
     frames := 0 // TODO - move this into a property on the Network struct
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
@@ -68,6 +69,7 @@ func main() {
             },
         },
     })
+    sensorStatuses = SerializeSensorStatuses(myNet)
 
     server, err := socketio.NewServer(nil)
     if err != nil {
@@ -81,6 +83,8 @@ func main() {
         // jsonRep, _ := json.Marshal(outputs)
         so.Emit("outputs", SerializeOutputs(myNet))
         so.Emit("sensors", SerializeSensors(myNet))
+
+        so.Emit("sensorStatuses", sensorStatuses)
 
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
@@ -108,6 +112,10 @@ func main() {
             EmitToAll(so, "outputs", outputs)
         }
     })
+    server.On("toggleSensor", func(so socketio.Socket, name string, status bool) {
+        sensorStatuses[name] = status
+        EmitToAll(so, "sensorToggled", name, status)
+    })
     server.On("autorun", func(so socketio.Socket, autorun bool) {
         EmitToAll(so, "autorun", autorun)
     })
@@ -128,6 +136,8 @@ func main() {
         EmitToAll(so, "cycle", frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
         EmitToAll(so, "sensors", SerializeSensors(myNet))
+        sensorStatuses = SerializeSensorStatuses(myNet)
+        EmitToAll(so, "sensorStatuses", sensorStatuses)
     })
 
     http.Handle("/socket.io/", server)

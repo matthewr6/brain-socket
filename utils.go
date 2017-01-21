@@ -20,6 +20,15 @@ func SerializeSensors(net *brain.Network) []string {
     return sensorNames
 }
 
+// used only for loading
+func SerializeSensorStatuses(net *brain.Network) map[string]bool {
+    sensorStatuses := make(map[string]bool)
+    for name := range net.Sensors {
+        sensorStatuses[name] = false
+    }
+    return sensorStatuses
+}
+
 func SerializeOutputs(net *brain.Network) map[string]map[string][]float64 {
     // todo possibly refactor brain structure to allow for references from sensor to brain?
     outputSubLevel := map[string][]float64{}

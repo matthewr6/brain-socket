@@ -3,6 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { toggleSensor } from '../actions/sensorActions';
+
 class Sensors extends Component {
   constructor(props) {
     super(props);
@@ -10,12 +12,17 @@ class Sensors extends Component {
     this.renderSensors = this.renderSensors.bind(this);
   }
   renderSensors() {
-    let bases = this.props.sensors.sort();
+    const sensors = this.props.sensors;
+    const bases = sensors.names.sort();
     return (
       bases.map(name => {
         return (
           <div key={`sensor-${name}`}>
-            <div>{name}</div>
+            <div>
+              {name}
+              <div>one <input type="checkbox" checked={sensors.statuses[`${name}-one`]} onChange={(e) => this.props.toggleSensor(`${name}-one`, e.target.checked)} /></div>
+              <div>two <input type="checkbox" checked={sensors.statuses[`${name}-two`]} onChange={(e) => this.props.toggleSensor(`${name}-two`, e.target.checked)} /></div>
+            </div>
           </div>
         );
       })
@@ -37,7 +44,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({  }, dispatch);
+  return bindActionCreators({ toggleSensor }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sensors);

@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { socketConnected } from '../actions/socketActions';
 import { cycled, autorunToggled } from '../actions/actions';
 import { updateOutputs } from '../actions/outputActions';
-import { updateSensors } from '../actions/sensorActions';
+import { sensorNames, sensorStatuses, sensorToggled } from '../actions/sensorActions';
 
 function initializeListeners(socket, dispatch) {
   socket.on('connect', () => {
@@ -20,7 +20,13 @@ function initializeListeners(socket, dispatch) {
     dispatch(updateOutputs(outputs));
   });
   socket.on('sensors', (sensors) => {
-    dispatch(updateSensors(sensors));
+    dispatch(sensorNames(sensors));
+  });
+  socket.on('sensorStatuses', (sensors) => {
+    dispatch(sensorStatuses(sensors));
+  });
+  socket.on('sensorToggled', (name, status) => {
+    dispatch(sensorToggled(name, status));
   });
   socket.on('cycle', (frames) => {
     dispatch(cycled(frames));
