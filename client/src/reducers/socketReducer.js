@@ -1,4 +1,4 @@
-import { SOCKET_CONNECTED } from '../actions/socketActions';
+import { SOCKET_CONNECTED, SOCKET_DISCONNECTED } from '../actions/socketActions';
 
 const INITIAL_STATE = {
   socket: null,
@@ -13,6 +13,11 @@ export default function(state=INITIAL_STATE, action) {
         socket: action.socket,
         connected: true
       };
+    case SOCKET_DISCONNECTED:
+      return {
+        socket: state.socket,
+        connected: false
+      }
     default:
       return state;
   }

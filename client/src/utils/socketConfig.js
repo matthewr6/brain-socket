@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { socketConnected } from '../actions/socketActions';
+import { socketConnected, socketDisconnected } from '../actions/socketActions';
 import { cycled, autorunToggled } from '../actions/actions';
 import { updateOutputs } from '../actions/outputActions';
 import { sensorNames, sensorStatuses, sensorToggled } from '../actions/sensorActions';
