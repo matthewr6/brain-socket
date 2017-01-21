@@ -50,9 +50,7 @@ func main() {
             Center: [3]int{8, 0, 12},
             OutputCount: 5,
             InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
-                for _, node := range nodes {
-                    node.Value = 1
-                }
+                //
             },
         },
         brain.SensorConstructor{
@@ -63,9 +61,7 @@ func main() {
             Center: [3]int{8, 8, 12},
             OutputCount: 3,
             InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
-                for _, node := range nodes {
-                    node.Value = 1
-                }
+                //
             },
         },
     })
@@ -101,6 +97,13 @@ func main() {
         // should I save before or after cycle?
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
+            for name, _ := range myNet.Sensors {
+                if sensorStatuses[name] {
+                    for node := range sensor.Nodes {
+                        node.Value = 1
+                    }
+                }
+            }
             if saveFrames {
                 myNet.DumpJSON(strconv.Itoa(frames))
             }
@@ -127,9 +130,7 @@ func main() {
         myNet = brain.LoadState(loadName)
         for _, sensor := range myNet.Sensors {
             sensor.In = func(nodes []*brain.Node, influences map[string]*brain.Output) {
-                for _, node := range nodes {
-                    node.Value = 1
-                }
+                //
             }
         }
         frames = 0
