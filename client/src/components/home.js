@@ -52,16 +52,32 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.step}>Step ({this.props.status.frames})</button>
-        Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
-        Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
-        Cycle increment:  <input type="number" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+        <div>
+          <button onClick={this.step}>Step ({this.props.status.frames})</button>
+        </div>
+        <div>
+          Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
+        </div>
+        <div>
+          Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
+        </div>
+        <div>
+          Cycle increment:  <input type="number" min="1" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+        </div>
         
-        <button onClick={this.saveState}>Save</button>
-        Save name:  <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
+        <div>
+          <button onClick={this.saveState}>Save</button>
+        </div>
+        <div>
+          Save name:  <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
+        </div>
 
-        <button onClick={this.loadState}>Load</button>
-        Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
+        <div>
+          <button onClick={this.loadState}>Load</button>
+        </div>
+        <div>
+          Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
+        </div>
         <div>
           <div>Outputs</div>
           <Outputs />

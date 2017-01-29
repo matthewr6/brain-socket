@@ -40,6 +40,7 @@ also whether to stimulate maybe?  would require change in package.
 
 func main() {
     sensorStatuses := make(map[string]bool)
+    directory := "."
     frames := 0 // TODO - move this into a property on the Network struct
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
@@ -105,7 +106,7 @@ func main() {
                 }
             }
             if saveFrames {
-                myNet.DumpJSON(strconv.Itoa(frames))
+                myNet.DumpJSON(strconv.Itoa(frames), directory)
             }
             frames++
 
@@ -123,11 +124,11 @@ func main() {
         EmitToAll(so, "autorun", autorun)
     })
     server.On("save", func(so socketio.Socket, saveName string) {
-        myNet.SaveState(saveName)
+        myNet.SaveState(saveName, directory)
         EmitToAll(so, "saved")
     })
     server.On("load", func(so socketio.Socket, loadName string) {
-        myNet = brain.LoadState(loadName)
+        myNet = brain.LoadState(loadName, directory)
         for _, sensor := range myNet.Sensors {
             sensor.In = func(nodes []*brain.Node, influences map[string]*brain.Output) {
                 //
