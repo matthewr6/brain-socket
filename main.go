@@ -123,6 +123,16 @@ func main() {
     server.On("autorun", func(so socketio.Socket, autorun bool) {
         EmitToAll(so, "autorun", autorun)
     })
+    server.On("directoryName", func(so socketio.Socket, name string) {
+        directory = name
+        if directory == "" {
+            directory = "."
+        }
+        if directory[len(directory)-1] == '/' {
+            directory = directory[0:len(directory)-1]
+        }
+        EmitToAll(so, "directoryChanged", name)
+    })
     server.On("save", func(so socketio.Socket, saveName string) {
         myNet.SaveState(saveName, directory)
         EmitToAll(so, "saved")

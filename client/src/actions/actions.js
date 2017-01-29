@@ -1,5 +1,6 @@
 export const CYCLED = 'CYCLED';
 export const AUTORUN_TOGGLED = 'AUTORUN_TOGGLED';
+export const DIRECTORY_CHANGED = 'DIRECTORY_CHANGED';
 
 export function step(amount, generateFrames) {
     return function(dispatch, getState) {
@@ -35,4 +36,15 @@ export function toggleAutorun(autorun) {
 
 export function autorunToggled(autorun) {
     return { type: AUTORUN_TOGGLED, autorun: autorun };
+}
+
+export function changeDirectoryName(name) {
+    return function(dispatch, getState) {
+        let { socket } = getState();
+        socket.socket.emit('directoryName', name);
+    }
+}
+
+export function directoryChanged(name) {
+    return { type: DIRECTORY_CHANGED, name: name };
 }

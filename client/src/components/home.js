@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { step, saveState, loadState, toggleAutorun } from '../actions/actions';
+import { step, saveState, loadState, toggleAutorun, changeDirectoryName } from '../actions/actions';
 import Outputs from './outputs';
 import Sensors from './sensors';
 
@@ -78,6 +78,11 @@ class Home extends Component {
         <div>
           Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
         </div>
+
+        <div>
+          Directory:  <input type="text" value={this.props.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
+        </div>
+
         <div>
           <div>Outputs</div>
           <Outputs />
@@ -96,7 +101,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ step, saveState, loadState, toggleAutorun }, dispatch);
+  return bindActionCreators({ step, saveState, loadState, toggleAutorun, changeDirectoryName }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

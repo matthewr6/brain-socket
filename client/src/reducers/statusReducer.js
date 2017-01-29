@@ -1,21 +1,27 @@
-import { CYCLED, AUTORUN_TOGGLED } from '../actions/actions';
+import { CYCLED, AUTORUN_TOGGLED, DIRECTORY_CHANGED } from '../actions/actions';
 
 const INITIAL_STATE = {
   frames: 0,
-  autorun: false
+  autorun: false,
+  directory: ''
 };
 
 export default function(state=INITIAL_STATE, action) {
   switch (action.type) {
     case CYCLED:
       return {
-        frames: action.frames,
-        autorun: state.autorun
+        ...state,
+        frames: action.frames
       };
     case AUTORUN_TOGGLED:
       return {
-        frames: state.frames,
+        ...state,
         autorun: action.autorun
+      };
+    case DIRECTORY_CHANGED:
+      return {
+        ...state,
+        directory: action.directory
       };
     default:
       return state;
