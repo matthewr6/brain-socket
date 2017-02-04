@@ -46,6 +46,13 @@ func main() {
             },
         },
     })
+
+    server.On("create", func(so socketio.Socket) {
+        /*
+        myNet := brain.Brain([3]int{}, []brain.SensorConstructor{})
+        */
+    })
+
     sensorStatuses = SerializeSensorStatuses(myNet)
 
     server, err := socketio.NewServer(nil)
