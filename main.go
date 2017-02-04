@@ -18,28 +18,6 @@ func EmitToAll(so socketio.Socket, event string, data ...interface{}) {
     so.Emit(event, data...)
 }
 
-// this loop is more suitable for sensors
-// outputs := [](map[string]string){}
-//             outputsUsed := make(map[string]bool)
-//             for name, _ := range myNet.Outputs {
-//                 baseName := name[0:len(name)-2]
-//                 if _, exists := outputsUsed[baseName]; !exists {
-//                     outputs = append(outputs, map[string]string{
-//                         "name": baseName,
-//                         "valueOne": strconv.FormatFloat(myNet.Outputs[fmt.Sprintf("%v-0", baseName)].Value, 'f', -1, 64),
-//                         "valueTwo": strconv.FormatFloat(myNet.Outputs[fmt.Sprintf("%v-1", baseName)].Value, 'f', -1, 64),
-//                     })
-//                     outputsUsed[baseName] = true
-//                 }
-//             }
-//             jsonRep, _ := json.Marshal(outputs)
-
-/*
-sensor stuff
-array of names?  can generate left/right on client.
-also whether to stimulate maybe?  would require change in package.
-*/
-
 func main() {
     sensorStatuses := make(map[string]bool)
     directory := "."
