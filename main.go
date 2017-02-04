@@ -4,6 +4,8 @@ import (
     "github.com/firedrake969/gopher-brain"
     "github.com/googollee/go-socket.io"
 
+    "os"
+    "fmt"
     "log"
     "strconv"
     "net/http"
@@ -134,6 +136,12 @@ func main() {
         EmitToAll(so, "directoryChanged", name)
     })
     server.On("save", func(so socketio.Socket, saveName string) {
+        log.Println(directory)
+        if _, err := os.Stat(directory); os.IsNotExist(err) {
+            log.Println("mkdir")
+            os.MkdirAll(fmt.Sprintf("%v/frames", directory), os.ModePerm) // what permissions do I want
+            os.MkdirAll(fmt.Sprintf("%v/state", directory), os.ModePerm)
+        }
         myNet.SaveState(saveName, directory)
         EmitToAll(so, "saved")
     })
