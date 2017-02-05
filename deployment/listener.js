@@ -2,51 +2,55 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 
-var base_dir = '~/projects/brain-socket';
+var baseDir = '~/projects/brain-socket';
+var mainProcess;
 
 app.post('/payload', function (req, res) {
     var event = req.body;
-    var mainProcess;
     // make sure it's a push to master
-    if (event.respository.full_name.toLowerCase() == 'firedrake969/brain-socket' && event.ref = 'refs/heads/master') {
-        console.log('Deploying...')
+    if (event.respository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
+        console.log('Deploying...');
 
         // kill server if already running
-        if (mainProcess.kill) {
+        if (mainProcess) {
             mainProcess.kill();
         }
-        
+
         // reset local changes
-        exec('git reset --hard', {cwd: base_dir}, execCallback);
+        execSync('git reset --hard', {cwd: baseDir}, execCallback);
 
         // remove added files
-        exec('git clean -df', {cwd: base_dir}, execCallback);
+        execSync('git clean -df', {cwd: baseDir}, execCallback);
 
         // pull
-        exec('git pull -f', {cwd: base_dir}, execCallback);
+        execSync('git pull origin master', {cwd: baseDir}, execCallback);
 
         // build
-        exec('go build', {cwd: base_dir}, execCallback);
-        exec('npm i', {cwd: `${base_dir}/client`}, execCallback);
-        exec('webpack', {cwd: `${base_dir}/client`}, execCallback);
+        execSync('go build', {cwd: baseDir}, execCallback);
+        execSync('npm i', {cwd: `${baseDir}/client`}, execCallback);
+        execSync('webpack', {cwd: `${baseDir}/client`}, execCallback);
 
         // and run
-        mainProcess = exec('./brain-socket', {cwd: base_dir}, execCallback);
+        mainProcess = spawn('./brain-socket', {cwd: baseDir});
+        mainProcess.stdout.on('data', function(data) {
+            process.stdout.write(data.toString());
+        });
 
-        console.log('deployed');
+        console.log('Deployed');
     }
 });
 
-app.listen(8000, function () {
-    console.log('Node server on port 8000')
+app.listen(8000, function() {
+    process.stdout.write('Node server on port 8000');
 });
 
 function execCallback(err, stdout, stderr) {
     if (stdout) {
-        console.log(stdout);
+        process.stdout.write(stdout);
     }
     if (stderr) {
-        console.log(stderr);
+        console.error(stderr);
     }
 }
