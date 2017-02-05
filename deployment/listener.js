@@ -27,6 +27,7 @@ app.post('/', function (req, res) {
         execSync('git pull origin master', {cwd: baseDir});
 
         // build
+        execSync('go get -u all');
         execSync('go build', {cwd: baseDir});
         execSync('npm i', {cwd: `${baseDir}/client`});
         execSync('webpack', {cwd: `${baseDir}/client`});
