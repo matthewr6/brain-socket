@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var exec = require('child_process').exec;
+var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 
 var baseDir = '~/projects/brain-socket';
