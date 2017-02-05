@@ -26,9 +26,6 @@ app.post('/', function (req, res) {
         // pull
         execSync('git pull origin master', {cwd: baseDir});
 
-        // set gopath
-        execSync('export GOPATH=/home/matthew/go');
-
         // build
         execSync('go build', {cwd: baseDir});
         execSync('npm i', {cwd: `${baseDir}/client`});
