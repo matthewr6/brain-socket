@@ -24,12 +24,12 @@ app.post('/', function (req, res) {
         }
 
         // pull
-        execSync('git pull origin master', {cwd: baseDir}, execCallback);
+        execSync('git pull origin master', {cwd: baseDir});
 
         // build
-        execSync('go build', {cwd: baseDir}, execCallback);
-        execSync('npm i', {cwd: `${baseDir}/client`}, execCallback);
-        execSync('webpack', {cwd: `${baseDir}/client`}, execCallback);
+        execSync('go build', {cwd: baseDir});
+        execSync('npm i', {cwd: `${baseDir}/client`});
+        execSync('webpack', {cwd: `${baseDir}/client`});
 
         // and run
         mainProcess = spawn('./brain-socket', {cwd: baseDir});
@@ -44,12 +44,3 @@ app.post('/', function (req, res) {
 app.listen(8000, function() {
     console.log('Node server on port 8000');
 });
-
-function execCallback(err, stdout, stderr) {
-    if (stdout) {
-        process.stdout.write(stdout);
-    }
-    if (stderr) {
-        console.error(stderr);
-    }
-}
