@@ -3,3 +3,4 @@ net_*
 *_state.json
 client/node_modules/*
 client/build/*
+deployment/node_modules/*

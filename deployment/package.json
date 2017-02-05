@@ -1,0 +1,23 @@
+{
+  "name": "go-server-deployment",
+  "version": "1.0.0",
+  "description": "auto deploy go server when commits to master are made",
+  "main": "listener.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firedrake969/brain-socket.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firedrake969/brain-socket/issues"
+  },
+  "homepage": "https://github.com/firedrake969/brain-socket#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "^4.14.1"
+  }
+}
