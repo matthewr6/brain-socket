@@ -24,7 +24,7 @@ app.post('/', function (req, res) {
         }
 
         // pull
-        execSync('git pull origin master', {cwd: baseDir});
+        console.log(execSync('git pull origin master', {cwd: baseDir}));
 
         // build
         execSync('go build', {cwd: baseDir});
