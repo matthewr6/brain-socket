@@ -26,7 +26,8 @@ class Home extends Component {
     this.autorunToggle = this.autorunToggle.bind(this);
     this.loadState = this.loadState.bind(this);
     this.changeLoadName = this.changeLoadName.bind(this);
-    this.newNet = this.newNet.bind(this);
+    this.toggleNewNet = this.toggleNewNet.bind(this);
+    this.closeNewNet = this.closeNewNet.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
@@ -52,8 +53,11 @@ class Home extends Component {
   autorunToggle(e) {
     this.props.autorunToggle(e.target.checked);
   }
-  newNet() {
-    this.setState({showNetCreation: true});
+  toggleNewNet() {
+    this.setState({showNetCreation: !this.state.showNetCreation});
+  }
+  closeNewNet() {
+    this.setState({showNetCreation: false});
   }
   render() {
     return (
@@ -90,9 +94,9 @@ class Home extends Component {
         </div>
 
         <div>
-          <button onClick={this.newNet}>Create New</button>
+          <button onClick={this.toggleNewNet}>Create New</button>
         </div>
-        {this.state.showNetCreation && <NetCreation />}
+        {this.state.showNetCreation && <NetCreation close={this.closeNewNet} />}
 
         <div>
           <div>Outputs</div>

@@ -9,9 +9,9 @@ class NetCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      x: 1,
-      y: 1,
-      z: 1
+      x: 2,
+      y: 2,
+      z: 2
     };
     this.create = this.create.bind(this);
     this.changeX = this.changeX.bind(this);
@@ -19,8 +19,8 @@ class NetCreation extends Component {
     this.changeZ = this.changeZ.bind(this);
   }
   create() {
-    // this.props.createNew(this.state.x, this.state.y, this.state.z);
-    console.log(this.state);
+    this.props.createNew(this.state.x, this.state.y, this.state.z);
+    this.props.close();
   }
   changeX(e) {
     this.setState({x: parseInt(e.target.value)});
@@ -32,12 +32,11 @@ class NetCreation extends Component {
     this.setState({z: parseInt(e.target.value)});
   }
   render() {
-    //x, y , z, sensors
     return (
       <div>
-        <div>X (will be doubled): <input type="number" min="1" value={this.state.x} onChange={this.changeX} /></div>
-        <div>Y: <input type="number" min="1" value={this.state.y} onChange={this.changeY} /></div>
-        <div>Z: <input type="number" min="1" value={this.state.z} onChange={this.changeZ} /></div>
+        <div>X (will be doubled): <input type="number" min="2" value={this.state.x} onChange={this.changeX} /></div>
+        <div>Y: <input type="number" min="2" value={this.state.y} onChange={this.changeY} /></div>
+        <div>Z: <input type="number" min="2" value={this.state.z} onChange={this.changeZ} /></div>
         <div><button onClick={this.create}>Create</button></div>
       </div>
     );

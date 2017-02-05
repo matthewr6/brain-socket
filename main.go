@@ -47,11 +47,6 @@ func main() {
         },
     })
 
-    server.On("create", func(so socketio.Socket) {
-        /*
-        myNet := brain.Brain([3]int{}, []brain.SensorConstructor{})
-        */
-    })
 
     sensorStatuses = SerializeSensorStatuses(myNet)
 
@@ -59,6 +54,16 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
+    server.On("create", func(so socketio.Socket, x int, y int, z int) {
+        myNet := brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{})
+
+        frames = 0
+        EmitToAll(so, "cycle", frames)
+        EmitToAll(so, "outputs", SerializeOutputs(myNet))
+        EmitToAll(so, "sensors", SerializeSensors(myNet))
+        sensorStatuses = SerializeSensorStatuses(myNet)
+        EmitToAll(so, "sensorStatuses", sensorStatuses)
+    })
     server.On("connection", func(so socketio.Socket) {
         so.Join(MAIN_ROOM)
         so.Emit("connected", true)
