@@ -48,3 +48,10 @@ export function changeDirectoryName(name) {
 export function directoryChanged(name) {
     return { type: DIRECTORY_CHANGED, name: name };
 }
+
+export function createNew(x, y, z/*args*/) {
+    return function(dispatch, getState) {
+        let { socket } = getState();
+        socket.socket.emit('create', x, y, z/*args*/);
+    }
+}

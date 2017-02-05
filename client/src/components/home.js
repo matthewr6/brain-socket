@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { step, saveState, loadState, toggleAutorun, changeDirectoryName } from '../actions/actions';
 import Outputs from './outputs';
 import Sensors from './sensors';
+import NetCreation from './netCreation';
 
 class Home extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class Home extends Component {
       saveName: '',
       loadName: '',
       saveFrames: false,
-      stepIncrement: 1
+      stepIncrement: 1,
+      showNetCreation: false
     };
     this.step = this.step.bind(this);
     this.saveState = this.saveState.bind(this);
@@ -24,6 +26,8 @@ class Home extends Component {
     this.autorunToggle = this.autorunToggle.bind(this);
     this.loadState = this.loadState.bind(this);
     this.changeLoadName = this.changeLoadName.bind(this);
+    this.toggleNewNet = this.toggleNewNet.bind(this);
+    this.closeNewNet = this.closeNewNet.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
@@ -48,6 +52,12 @@ class Home extends Component {
   }
   autorunToggle(e) {
     this.props.autorunToggle(e.target.checked);
+  }
+  toggleNewNet() {
+    this.setState({showNetCreation: !this.state.showNetCreation});
+  }
+  closeNewNet() {
+    this.setState({showNetCreation: false});
   }
   render() {
     return (
@@ -82,6 +92,11 @@ class Home extends Component {
         <div>
           Directory:  <input type="text" value={this.props.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
         </div>
+
+        <div>
+          <button onClick={this.toggleNewNet}>Create New</button>
+        </div>
+        {this.state.showNetCreation && <NetCreation close={this.closeNewNet} />}
 
         <div>
           <div>Outputs</div>
