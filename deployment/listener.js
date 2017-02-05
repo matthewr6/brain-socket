@@ -6,7 +6,7 @@ var spawn = require('child_process').spawn;
 var baseDir = '~/projects/brain-socket';
 var mainProcess;
 
-app.post('/payload', function (req, res) {
+app.post('/', function (req, res) {
     var event = req.body;
     // make sure it's a push to master
     if (event.respository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
