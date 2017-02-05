@@ -23,12 +23,6 @@ app.post('/', function (req, res) {
             mainProcess.kill();
         }
 
-        // reset local changes
-        execSync('git reset --hard', {cwd: baseDir}, execCallback);
-
-        // remove added files
-        execSync('git clean -df', {cwd: baseDir}, execCallback);
-
         // pull
         execSync('git pull origin master', {cwd: baseDir}, execCallback);
 
@@ -48,7 +42,7 @@ app.post('/', function (req, res) {
 });
 
 app.listen(8000, function() {
-    process.stdout.write('Node server on port 8000');
+    console.log('Node server on port 8000');
 });
 
 function execCallback(err, stdout, stderr) {
