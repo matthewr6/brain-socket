@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 
-var baseDir = '~/projects/brain-socket/';
+var baseDir = '/home/matthew/projects/brain-socket';
 var mainProcess;
 
 app.use(bodyParser.urlencoded({
