@@ -9,7 +9,7 @@ var mainProcess;
 app.post('/', function (req, res) {
     var event = req.body;
     // make sure it's a push to master
-    if (event.respository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
+    if (event.repository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
         console.log('Deploying...');
 
         // kill server if already running
