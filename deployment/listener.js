@@ -1,15 +1,19 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 
 var baseDir = '~/projects/brain-socket';
 var mainProcess;
 
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
+
 app.post('/', function (req, res) {
     var event = req.body;
-    console.log(event);
-    console.log(event);
     // make sure it's a push to master
     if (event.repository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
         console.log('Deploying...');

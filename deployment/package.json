@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/firedrake969/brain-socket#readme",
   "dependencies": {
+    "body-parser": "^1.16.0",
     "express": "^4.14.1"
   }
 }
