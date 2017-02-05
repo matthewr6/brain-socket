@@ -84,6 +84,10 @@ class Home extends Component {
         </div>
 
         <div>
+          test autodeploy
+        </div>
+
+        <div>
           <div>Outputs</div>
           <Outputs />
           <div>Sensors</div>
