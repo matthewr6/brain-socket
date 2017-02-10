@@ -49,9 +49,16 @@ export function directoryChanged(name) {
     return { type: DIRECTORY_CHANGED, name: name };
 }
 
-export function createNew(x, y, z/*args*/) {
+export function createNew(x, y, z) {
     return function(dispatch, getState) {
         let { socket } = getState();
-        socket.socket.emit('create', x, y, z/*args*/);
+        socket.socket.emit('create', x, y, z);
+    }
+}
+
+export function createSensor(state) {
+    return function(dispatch, getState) {
+        let { socket } = getState();
+        socket.socket.emit('createSensor', state.name, state.radius, state.count, state.plane, state.centerX, state.centerY, state.centerZ, state.outputCount);
     }
 }
