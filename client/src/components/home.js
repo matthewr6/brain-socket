@@ -15,7 +15,8 @@ class Home extends Component {
     this.state = {
       saveName: '',
       loadName: '',
-      saveFrames: false,
+      saveFrames: true,
+      saveIO: true,
       stepIncrement: 1,
       showNetCreation: false,
       showSensorCreation: false,
@@ -34,7 +35,7 @@ class Home extends Component {
     this.closeNewSensor = this.closeNewSensor.bind(this);
   }
   step() {
-    this.props.step(this.state.stepIncrement, this.state.saveFrames);
+    this.props.step(this.state.stepIncrement, this.state.saveFrames, this.state.saveIO);
   }
   saveState() {
     this.props.saveState(this.state.saveName);
@@ -47,6 +48,9 @@ class Home extends Component {
   }
   toggleFrameSave(e) {
     this.setState({saveFrames: e.target.checked});
+  }
+  toggleIOSave(e) {
+    this.setState({saveIO: e.target.checked});
   }
   changeSaveName(e) {
     this.setState({saveName: e.target.value});
@@ -77,6 +81,9 @@ class Home extends Component {
         </div>
         <div>
           Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
+        </div>
+        <div>
+          Save sensors/output state:  <input type="checkbox" checked={this.state.saveIO} onChange={this.toggleIOave} />
         </div>
         <div>
           Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />

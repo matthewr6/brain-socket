@@ -2,10 +2,10 @@ export const CYCLED = 'CYCLED';
 export const AUTORUN_TOGGLED = 'AUTORUN_TOGGLED';
 export const DIRECTORY_CHANGED = 'DIRECTORY_CHANGED';
 
-export function step(amount, generateFrames) {
+export function step(amount, generateFrames, saveIO) {
     return function(dispatch, getState) {
         let { socket } = getState();
-        socket.socket.emit('cycle', amount, generateFrames);
+        socket.socket.emit('cycle', amount, generateFrames, saveIO);
     }
 }
 

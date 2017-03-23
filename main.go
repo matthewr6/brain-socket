@@ -9,6 +9,7 @@ import (
     "log"
     "strconv"
     "net/http"
+    "encoding/json"
 )
 
 const MAIN_ROOM = "server"
@@ -55,7 +56,7 @@ func main() {
         log.Fatal(err)
     }
     server.On("create", func(so socketio.Socket, x int, y int, z int) {
-        myNet := brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{})
+        myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{})
 
         frames = 0
         EmitToAll(so, "cycle", frames)
@@ -96,7 +97,7 @@ func main() {
     server.On("error", func(so socketio.Socket, err error) {
         log.Println("error:", err)
     })
-    server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool) {
+    server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
         // should I save before or after cycle?
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
@@ -110,6 +111,28 @@ func main() {
             if saveFrames {
                 myNet.DumpJSON(strconv.Itoa(frames), directory)
             }
+
+            // func (net Network) DumpJSON(name string, directory string) {
+            //     f, _ := os.Create(fmt.Sprintf("%v/frames/net_%v.json", directory, name))
+            //     f.WriteString(net.String())
+            //     f.Close()
+            // }
+            // jsonRep, _ := json.MarshalIndent(s, "", "    ")
+            // return string(jsonRep)
+
+            if saveIO {
+                // stuff
+                sensorFile, _ := os.Create(fmt.Sprintf("%v/io/sensors/%v.json", directory, frames))
+                sJsonRep, _ := json.MarshalIndent(sensorStatuses, "", "    ")
+                sensorFile.WriteString(string(sJsonRep))
+                sensorFile.Close()
+
+                outputFile, _ := os.Create(fmt.Sprintf("%v/io/outputs/%v.json", directory, frames))
+                oJsonRep, _ := json.MarshalIndent(SerializeOutputs(myNet), "", "    ")
+                outputFile.WriteString(string(oJsonRep))
+                outputFile.Close()
+            }
+
             frames++
 
             EmitToAll(so, "cycle", frames)

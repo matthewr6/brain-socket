@@ -4,3 +4,4 @@ net_*
 client/node_modules/*
 client/build/*
 deployment/node_modules/*
+io/
