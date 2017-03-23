@@ -7,6 +7,7 @@ import { step, saveState, loadState, toggleAutorun, changeDirectoryName } from '
 import Outputs from './outputs';
 import Sensors from './sensors';
 import NetCreation from './netCreation';
+import SensorCreation from './sensorCreation';
 
 class Home extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class Home extends Component {
       loadName: '',
       saveFrames: false,
       stepIncrement: 1,
-      showNetCreation: false
+      showNetCreation: false,
+      showSensorCreation: false,
     };
     this.step = this.step.bind(this);
     this.saveState = this.saveState.bind(this);
@@ -28,6 +30,8 @@ class Home extends Component {
     this.changeLoadName = this.changeLoadName.bind(this);
     this.toggleNewNet = this.toggleNewNet.bind(this);
     this.closeNewNet = this.closeNewNet.bind(this);
+    this.toggleNewSensor = this.toggleNewSensor.bind(this);
+    this.closeNewSensor = this.closeNewSensor.bind(this);
   }
   step() {
     this.props.step(this.state.stepIncrement, this.state.saveFrames);
@@ -58,6 +62,12 @@ class Home extends Component {
   }
   closeNewNet() {
     this.setState({showNetCreation: false});
+  }
+  toggleNewSensor() {
+    this.setState({showSensorCreation: !this.state.showSensorCreation});
+  }
+  closeNewSensor() {
+    this.setState({showSensorCreation: false});
   }
   render() {
     return (
@@ -97,6 +107,11 @@ class Home extends Component {
           <button onClick={this.toggleNewNet}>Create New</button>
         </div>
         {this.state.showNetCreation && <NetCreation close={this.closeNewNet} />}
+
+        <div>
+          <button onClick={this.toggleNewSensor}>Create Sensor</button>
+        </div>
+        {this.state.showSensorCreation && <SensorCreation close={this.closeNewSensor} />}
 
         <div>
           <div>Outputs</div>

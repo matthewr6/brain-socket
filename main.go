@@ -64,6 +64,16 @@ func main() {
         sensorStatuses = SerializeSensorStatuses(myNet)
         EmitToAll(so, "sensorStatuses", sensorStatuses)
     })
+    server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
+        log.Println(name, radius, plane, centerX, centerY, centerZ, outputCount);
+        myNet.CreateSensor(name, radius, count, plane, [3]int{centerX, centerY, centerZ},  outputCount, func(nodes []*brain.Node, influences map[string]*brain.Output) {
+            //
+        })
+        EmitToAll(so, "outputs", SerializeOutputs(myNet))
+        EmitToAll(so, "sensors", SerializeSensors(myNet))
+        sensorStatuses = SerializeSensorStatuses(myNet)
+        EmitToAll(so, "sensorStatuses", sensorStatuses)
+    })
     server.On("connection", func(so socketio.Socket) {
         so.Join(MAIN_ROOM)
         so.Emit("connected", true)
