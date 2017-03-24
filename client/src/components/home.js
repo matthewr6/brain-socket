@@ -25,6 +25,7 @@ class Home extends Component {
     this.saveState = this.saveState.bind(this);
     this.changeIncrement = this.changeIncrement.bind(this);
     this.toggleFrameSave = this.toggleFrameSave.bind(this);
+    this.toggleIOSave = this.toggleIOSave.bind(this);
     this.changeSaveName = this.changeSaveName.bind(this);
     this.autorunToggle = this.autorunToggle.bind(this);
     this.loadState = this.loadState.bind(this);
@@ -83,7 +84,7 @@ class Home extends Component {
           Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
         </div>
         <div>
-          Save sensors/output state:  <input type="checkbox" checked={this.state.saveIO} onChange={this.toggleIOave} />
+          Save sensors/output state:  <input type="checkbox" checked={this.state.saveIO} onChange={this.toggleIOSave} />
         </div>
         <div>
           Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
