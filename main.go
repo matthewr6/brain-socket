@@ -88,6 +88,8 @@ func main() {
 
         so.Emit("sensorStatuses", sensorStatuses)
 
+        so.Emit("directoryChanged", directory)
+
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
         // for name, sensor := range myNet.Sensors {

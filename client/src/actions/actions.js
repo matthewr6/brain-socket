@@ -45,8 +45,8 @@ export function changeDirectoryName(name) {
     }
 }
 
-export function directoryChanged(name) {
-    return { type: DIRECTORY_CHANGED, name: name };
+export function directoryChanged(directory) {
+    return { type: DIRECTORY_CHANGED, directory: directory };
 }
 
 export function createNew(x, y, z) {

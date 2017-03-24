@@ -108,7 +108,7 @@ class Home extends Component {
         </div>
 
         <div>
-          Directory:  <input type="text" value={this.props.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
+          Directory:  <input type="text" value={this.props.status.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
         </div>
 
         <div>
