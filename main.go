@@ -66,10 +66,12 @@ func main() {
         EmitToAll(so, "sensorStatuses", sensorStatuses)
     })
     server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
-        log.Println(name, radius, plane, centerX, centerY, centerZ, outputCount);
+        // log.Println(name, radius, plane, centerX, centerY, centerZ, outputCount);
+        log.Println("Start creating sensor")
         myNet.CreateSensor(name, radius, count, plane, [3]int{centerX, centerY, centerZ},  outputCount, func(nodes []*brain.Node, influences map[string]*brain.Output) {
             //
         })
+        log.Println("Finished creating sensor")
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
         EmitToAll(so, "sensors", SerializeSensors(myNet))
         sensorStatuses = SerializeSensorStatuses(myNet)
@@ -111,14 +113,6 @@ func main() {
             if saveFrames {
                 myNet.DumpJSON(strconv.Itoa(frames), directory)
             }
-
-            // func (net Network) DumpJSON(name string, directory string) {
-            //     f, _ := os.Create(fmt.Sprintf("%v/frames/net_%v.json", directory, name))
-            //     f.WriteString(net.String())
-            //     f.Close()
-            // }
-            // jsonRep, _ := json.MarshalIndent(s, "", "    ")
-            // return string(jsonRep)
 
             if saveIO {
                 // stuff
