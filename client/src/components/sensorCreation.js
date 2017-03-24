@@ -14,9 +14,9 @@ class SensorCreation extends Component {
       radius: 5,
       count: 1,
       plane: '',
-      centerX: 1,
-      centerY: 1,
-      centerZ: 1,
+      centerX: 2,
+      centerY: 2,
+      centerZ: 2,
       outputCount: 1
     };
     this.create = this.create.bind(this);
