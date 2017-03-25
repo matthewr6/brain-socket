@@ -55,8 +55,12 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    server.On("create", func(so socketio.Socket, x int, y int, z int) {
+    server.On("create", func(so socketio.Socket, x int, y int, z int, randomize bool) {
         myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{})
+
+        if randomize {
+            myNet.RandomizeValues()
+        }
 
         frames = 0
         EmitToAll(so, "cycle", frames)

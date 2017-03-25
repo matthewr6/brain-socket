@@ -49,10 +49,10 @@ export function directoryChanged(directory) {
     return { type: DIRECTORY_CHANGED, directory: directory };
 }
 
-export function createNew(x, y, z) {
+export function createNew(x, y, z, randomize) {
     return function(dispatch, getState) {
         let { socket } = getState();
-        socket.socket.emit('create', x, y, z);
+        socket.socket.emit('create', x, y, z, randomize);
     }
 }
 
