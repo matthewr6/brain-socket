@@ -1,3 +1,5 @@
+# FROM :: brain-socket
+
 import os
 import json
 import glob

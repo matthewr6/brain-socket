@@ -5,7 +5,11 @@ var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 
 var baseDir = '/home/matthew/projects/brain-socket';
-var mainProcess;
+
+var mainProcess = spawn('./brain-socket', {cwd: baseDir});
+mainProcess.stdout.on('data', function(data) {
+    process.stdout.write(data.toString());
+});
 
 app.use(bodyParser.urlencoded({
     extended: false
