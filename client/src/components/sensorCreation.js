@@ -27,6 +27,7 @@ class SensorCreation extends Component {
     this.changeOutputCount = this.changeOutputCount.bind(this);
     this.changePlane = this.changePlane.bind(this);
     this.changeCount = this.changeCount.bind(this);
+    this.changeRadius = this.changeRadius.bind(this);
   }
   create() {
     // todo - do validation
