@@ -15,7 +15,7 @@ class Home extends Component {
     this.state = {
       saveName: '',
       loadName: '',
-      saveFrames: true,
+      saveFrames: false,
       saveIO: true,
       stepIncrement: 1,
       showNetCreation: false,
