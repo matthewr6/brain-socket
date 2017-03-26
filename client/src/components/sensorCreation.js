@@ -66,10 +66,10 @@ class SensorCreation extends Component {
         <div>Plane:  <input type="text" maxLength="1" value={this.state.plane} onChange={this.changePlane} /></div>
         <div>Radius: <input type="number" value={this.state.radius} min="1" onChange={this.changeRadius} /></div>
         <div>Count: <input type="number" min="1" value={this.state.count} onChange={this.changeCount} /></div>
-        <div>Center X: <input type="number" min="2" value={this.state.centerX} onChange={this.changeX} /></div>
-        <div>Center Y: <input type="number" min="2" value={this.state.centerY} onChange={this.changeY} /></div>
-        <div>Center Z: <input type="number" min="2" value={this.state.centerZ} onChange={this.changeZ} /></div>
-        <div>Output Count: <input type="number" min="2" value={this.state.outputCount} onChange={this.changeOutputCount} /></div>
+        <div>Center X: <input type="number" value={this.state.centerX} onChange={this.changeX} /></div>
+        <div>Center Y: <input type="number" value={this.state.centerY} onChange={this.changeY} /></div>
+        <div>Center Z: <input type="number" value={this.state.centerZ} onChange={this.changeZ} /></div>
+        <div>Output Count: <input type="number" value={this.state.outputCount} onChange={this.changeOutputCount} /></div>
         <div><button onClick={this.create}>Create</button></div>
       </div>
     );
