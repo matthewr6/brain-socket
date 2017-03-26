@@ -42,7 +42,7 @@ class SensorCreation extends Component {
     this.setState({plane: e.target.value});
   }
   changeRadius(e) {
-    this.setState({radius: e.target.value});
+    this.setState({radius: parseInt(e.target.value)});
   }
   changeX(e) {
     this.setState({centerX: parseInt(e.target.value)});
