@@ -56,11 +56,11 @@ func main() {
         log.Fatal(err)
     }
     server.On("create", func(so socketio.Socket, x int, y int, z int, randomize bool) {
-        myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{})
+        myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{}, randomize)
 
-        if randomize {
-            myNet.RandomizeValues()
-        }
+        // if randomize {
+        //     myNet.RandomizeValues(0.5)
+        // }
 
         frames = 0
         EmitToAll(so, "cycle", frames)

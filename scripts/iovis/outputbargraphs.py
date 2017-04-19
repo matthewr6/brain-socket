@@ -41,6 +41,7 @@ def main(count):
             )
 
         fig, ax = plt.subplots()
+        plt.title(i+1)
         plt.bar(np.arange(len(data)), data.values(), align='center')
         plt.ylim(0, 5) # todo - choose ymax
         plt.xticks(np.arange(len(data)), xlabels)
