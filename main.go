@@ -22,7 +22,6 @@ func EmitToAll(so socketio.Socket, event string, data ...interface{}) {
 func main() {
     sensorStatuses := make(map[string]bool)
     directory := "."
-    frames := 0 // TODO - move this into a property on the Network struct
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
             Name:"eye",
@@ -62,8 +61,7 @@ func main() {
         //     myNet.RandomizeValues(0.5)
         // }
 
-        frames = 0
-        EmitToAll(so, "cycle", frames)
+        EmitToAll(so, "cycle", myNet.Frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
         EmitToAll(so, "sensors", SerializeSensors(myNet))
         sensorStatuses = SerializeSensorStatuses(myNet)
@@ -84,7 +82,7 @@ func main() {
     server.On("connection", func(so socketio.Socket) {
         so.Join(MAIN_ROOM)
         so.Emit("connected", true)
-        so.Emit("cycle", frames)
+        so.Emit("cycle", myNet.Frames)
 
         // jsonRep, _ := json.Marshal(outputs)
         so.Emit("outputs", SerializeOutputs(myNet))
@@ -117,25 +115,25 @@ func main() {
                 }
             }
             if saveFrames {
-                myNet.DumpJSON(strconv.Itoa(frames), directory)
+                myNet.DumpJSON(strconv.Itoa(myNet.Frames), directory)
             }
 
             if saveIO {
                 // stuff
-                sensorFile, _ := os.Create(fmt.Sprintf("%v/io/sensors/%v.json", directory, frames))
+                sensorFile, _ := os.Create(fmt.Sprintf("%v/io/sensors/%v.json", directory, myNet.Frames))
                 sJsonRep, _ := json.MarshalIndent(sensorStatuses, "", "    ")
                 sensorFile.WriteString(string(sJsonRep))
                 sensorFile.Close()
 
-                outputFile, _ := os.Create(fmt.Sprintf("%v/io/outputs/%v.json", directory, frames))
+                outputFile, _ := os.Create(fmt.Sprintf("%v/io/outputs/%v.json", directory, myNet.Frames))
                 oJsonRep, _ := json.MarshalIndent(SerializeOutputs(myNet), "", "    ")
                 outputFile.WriteString(string(oJsonRep))
                 outputFile.Close()
             }
 
-            frames++
+            myNet.Frames++
 
-            EmitToAll(so, "cycle", frames)
+            EmitToAll(so, "cycle", myNet.Frames)
 
             outputs := SerializeOutputs(myNet)
             EmitToAll(so, "outputs", outputs)
@@ -175,8 +173,7 @@ func main() {
                 //
             }
         }
-        frames = 0
-        EmitToAll(so, "cycle", frames)
+        EmitToAll(so, "cycle", myNet.Frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
         EmitToAll(so, "sensors", SerializeSensors(myNet))
         sensorStatuses = SerializeSensorStatuses(myNet)
