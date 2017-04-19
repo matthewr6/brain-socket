@@ -22,10 +22,6 @@ app.post('/', function (req, res) {
     if (event.repository.full_name.toLowerCase() === 'firedrake969/brain-socket' && event.ref === 'refs/heads/master') {
         console.log('Start deployment');
 
-        // kill server if already running
-        if (mainProcess) {
-            mainProcess.kill();
-        }
 
         // pull
         execSync('git pull origin master', {cwd: baseDir});
@@ -36,7 +32,11 @@ app.post('/', function (req, res) {
         execSync('npm i', {cwd: `${baseDir}/client`});
         execSync('webpack', {cwd: `${baseDir}/client`});
 
-        // and run
+        // run, but first...
+        // kill server if already running
+        if (mainProcess) {
+            mainProcess.kill();
+        }
         mainProcess = spawn('./brain-socket', {cwd: baseDir});
         mainProcess.stdout.on('data', function(data) {
             process.stdout.write(data.toString());
