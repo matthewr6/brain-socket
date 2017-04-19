@@ -46,7 +46,7 @@ func main() {
                 //
             },
         },
-    })
+    }, false)
 
 
     sensorStatuses = SerializeSensorStatuses(myNet)
