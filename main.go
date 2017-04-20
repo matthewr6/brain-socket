@@ -57,10 +57,6 @@ func main() {
     server.On("create", func(so socketio.Socket, x int, y int, z int, randomize bool) {
         myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{}, randomize)
 
-        // if randomize {
-        //     myNet.RandomizeValues(0.5)
-        // }
-
         EmitToAll(so, "cycle", myNet.Frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))
         EmitToAll(so, "sensors", SerializeSensors(myNet))
@@ -68,7 +64,6 @@ func main() {
         EmitToAll(so, "sensorStatuses", sensorStatuses)
     })
     server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
-        // log.Println(name, radius, plane, centerX, centerY, centerZ, outputCount);
         log.Println("Start creating sensor")
         myNet.CreateSensor(name, radius, count, plane, [3]int{centerX, centerY, centerZ},  outputCount, func(nodes []*brain.Node, influences map[string]*brain.Output) {
             //
@@ -104,7 +99,6 @@ func main() {
         log.Println("error:", err)
     })
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
-        // should I save before or after cycle?
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
             for name, sensor := range myNet.Sensors {
@@ -160,7 +154,7 @@ func main() {
         log.Println(directory)
         if _, err := os.Stat(directory); os.IsNotExist(err) {
             log.Println("mkdir")
-            os.MkdirAll(fmt.Sprintf("%v/frames", directory), os.ModePerm) // what permissions do I want
+            os.MkdirAll(fmt.Sprintf("%v/frames", directory), os.ModePerm)
             os.MkdirAll(fmt.Sprintf("%v/state", directory), os.ModePerm)
         }
         myNet.SaveState(saveName, directory)
