@@ -125,8 +125,6 @@ func main() {
                 outputFile.Close()
             }
 
-            myNet.Frames++
-
             EmitToAll(so, "cycle", myNet.Frames)
 
             outputs := SerializeOutputs(myNet)
