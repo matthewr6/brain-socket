@@ -9,6 +9,13 @@ export function step(amount, generateFrames, saveIO) {
     }
 }
 
+export function saveConnectionInfo() {
+    return function(dispatch, getState ){
+        let { socket } = getState();
+        socket.socket.emit('historicalConnectionInfo');
+    }
+}
+
 export function cycled(frames) {
     return { type: CYCLED, frames: frames }
 }
