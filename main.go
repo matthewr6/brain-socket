@@ -22,6 +22,8 @@ func EmitToAll(so socketio.Socket, event string, data ...interface{}) {
 func main() {
     sensorStatuses := make(map[string]bool)
     directory := "."
+    connectionCounts := []int{}
+    connectionAvgStrengths := []float64{}
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
             Name:"eye",
@@ -62,6 +64,8 @@ func main() {
         EmitToAll(so, "sensors", SerializeSensors(myNet))
         sensorStatuses = SerializeSensorStatuses(myNet)
         EmitToAll(so, "sensorStatuses", sensorStatuses)
+        connectionCounts = []int{}
+        connectionAvgStrengths = []float64{}
     })
     server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
         log.Println("Start creating sensor")
@@ -98,9 +102,23 @@ func main() {
     server.On("error", func(so socketio.Socket, err error) {
         log.Println("error:", err)
     })
+    server.On("historicalConnectionInfo", func(so socketio.Socket) {
+        connectionCountFile, _ := os.Create(fmt.Sprintf("%v/connections/counts.json", directory))
+        countJsonRep, _ := json.MarshalIndent(connectionCounts, "", "    ")
+        connectionCountFile.WriteString(string(countJsonRep))
+        connectionCountFile.Close()
+
+        connectionStrengthFile, _ := os.Create(fmt.Sprintf("%v/connections/strengths.json", directory))
+        strengthJsonRep, _ := json.MarshalIndent(connectionAvgStrengths, "", "    ")
+        connectionStrengthFile.WriteString(string(strengthJsonRep))
+        connectionStrengthFile.Close()
+    })
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
+            connectionCount, avgStrength := myNet.CountConnections()
+            connectionCounts = append(connectionCounts, connectionCount)
+            connectionAvgStrengths = append(connectionAvgStrengths, avgStrength)
             for name, sensor := range myNet.Sensors {
                 if sensorStatuses[name] {
                     for _, node := range sensor.Nodes {
@@ -111,18 +129,6 @@ func main() {
             if saveFrames {
                 myNet.DumpJSON(strconv.Itoa(myNet.Frames), directory)
             }
-            // should do an if.
-            connectionDataFile, _ := os.Create(fmt.Sprintf("%v/connections/%v.json", directory, myNet.Frames))
-            count, avgStrength := myNet.CountConnections()
-            jsonRep, _ := json.MarshalIndent(struct{
-                Count int            `json:"count"`
-                AvgStrength float64  `json:"avgStrength"`
-            }{
-                Count: count,
-                AvgStrength: avgStrength,
-            }, "", "    ")
-            connectionDataFile.WriteString(string(jsonRep))
-            connectionDataFile.Close()
 
             if saveIO {
                 // stuff
