@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { step, saveState, loadState, toggleAutorun, changeDirectoryName } from '../actions/actions';
+import { step, saveState, loadState, toggleAutorun, changeDirectoryName, saveConnectionInfo } from '../actions/actions';
 import Outputs from './outputs';
 import Sensors from './sensors';
 import NetCreation from './netCreation';
@@ -81,6 +81,9 @@ class Home extends Component {
           <button onClick={this.step}>Step ({this.props.status.frames})</button>
         </div>
         <div>
+          <button onClick={() => this.props.saveConnectionInfo()}>Save Connection Info</button>
+        </div>
+        <div>
           Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
         </div>
         <div>
@@ -139,7 +142,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ step, saveState, loadState, toggleAutorun, changeDirectoryName }, dispatch);
+  return bindActionCreators({ step, saveState, loadState, toggleAutorun, changeDirectoryName, saveConnectionInfo }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
