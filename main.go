@@ -111,6 +111,18 @@ func main() {
             if saveFrames {
                 myNet.DumpJSON(strconv.Itoa(myNet.Frames), directory)
             }
+            // should do an if.
+            connectionDataFile, _ := os.Create(fmt.Sprintf("%v/connections/%v.json", directory, myNet.Frames))
+            count, avgStrength := myNet.CountConnections()
+            jsonRep, _ := json.MarshalIndent(struct{
+                Count int            `json:"count"`
+                AvgStrength float64  `json:"avgStrength"`
+            }{
+                Count: count,
+                AvgStrength: avgStrength,
+            }, "", "    ")
+            connectionDataFile.WriteString(string(jsonRep))
+            connectionDataFile.Close()
 
             if saveIO {
                 // stuff
