@@ -188,6 +188,8 @@ func main() {
         EmitToAll(so, "sensors", SerializeSensors(myNet))
         sensorStatuses = SerializeSensorStatuses(myNet)
         EmitToAll(so, "sensorStatuses", sensorStatuses)
+        connectionCounts = []int{}
+        connectionAvgStrengths = []float64{}
     })
 
     http.Handle("/socket.io/", server)
