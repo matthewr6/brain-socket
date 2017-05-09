@@ -91,6 +91,12 @@ func main() {
 
         so.Emit("directoryChanged", directory)
 
+        so.Emit("learningRates",
+            brain.SYNAPSE_LEARNING_RATE,
+            brain.DYNAMIC_SYNAPSE_PROB_SPHERE,
+            brain.MIN_CONNECTIONS,
+            brain.MAX_CONNECTIONS)
+
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
         // for name, sensor := range myNet.Sensors {
@@ -112,6 +118,18 @@ func main() {
         strengthJsonRep, _ := json.MarshalIndent(connectionAvgStrengths, "", "    ")
         connectionStrengthFile.WriteString(string(strengthJsonRep))
         connectionStrengthFile.Close()
+    })
+    server.On("learningRates", func (so socketio.Socket, rate float64, probSphere float64, minConnections int, maxConnections int) {
+        if minConnections >= maxConnections {
+            return
+        }
+        brain.SetLearningRates(brain.LearningRates{
+            MinPossibleConnections: minConnections,
+            MaxPossibleConnections: maxConnections,
+            SynapseModificationRate: rate,
+            SynapseProbSphere: probSphere,
+        })
+        EmitToAll(so, "learningRates", rate, probSphere, minConnections, maxConnections)
     })
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
         for i := 0; i < cycles; i++ {

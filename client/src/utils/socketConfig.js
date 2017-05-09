@@ -4,6 +4,7 @@ import { socketConnected, socketDisconnected } from '../actions/socketActions';
 import { cycled, autorunToggled, directoryChanged } from '../actions/actions';
 import { updateOutputs } from '../actions/outputActions';
 import { sensorNames, sensorStatuses, sensorToggled } from '../actions/sensorActions';
+import { learningRatesReceived } from '../actions/learningRateActions';
 
 function initializeListeners(socket, dispatch) {
   socket.on('connect', () => {
@@ -36,6 +37,9 @@ function initializeListeners(socket, dispatch) {
   });
   socket.on('autorun', (autorun) => {
     dispatch(autorunToggled(autorun));
+  });
+  socket.on('learningRates', (rate, probSphere, minConn, maxConn) => {
+    dispatch(learningRatesReceived(rate, probSphere, minConn, maxConn));
   });
 }
 

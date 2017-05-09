@@ -70,7 +70,7 @@ class SensorCreation extends Component {
         <div>Center Y: <input type="number" value={this.state.centerY} onChange={this.changeY} /></div>
         <div>Center Z: <input type="number" value={this.state.centerZ} onChange={this.changeZ} /></div>
         <div>Output Count: <input type="number" value={this.state.outputCount} onChange={this.changeOutputCount} /></div>
-        <div><button onClick={this.create}>Create</button></div>
+        <div><button onClick={this.create}>Create New Sensor</button></div>
       </div>
     );
   }

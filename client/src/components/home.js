@@ -8,6 +8,7 @@ import Outputs from './outputs';
 import Sensors from './sensors';
 import NetCreation from './netCreation';
 import SensorCreation from './sensorCreation';
+import LearningRates from './learningRates';
 
 class Home extends Component {
   constructor(props) {
@@ -76,60 +77,61 @@ class Home extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="container">
         <div>
-          <button onClick={this.step}>Step ({this.props.status.frames})</button>
-        </div>
-        <div>
-          <button onClick={() => this.props.saveConnectionInfo()}>Save Connection Info</button>
-        </div>
-        <div>
-          Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
-        </div>
-        <div>
-          Save sensors/output state:  <input type="checkbox" checked={this.state.saveIO} onChange={this.toggleIOSave} />
-        </div>
-        <div>
-          Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
-        </div>
-        <div>
-          Cycle increment:  <input type="number" min="1" value={this.state.stepIncrement} onChange={this.changeIncrement} />
-        </div>
+          <div>
+            <button onClick={this.step}>Step ({this.props.status.frames})</button>
+          </div>
+          <div>
+            <button onClick={() => this.props.saveConnectionInfo()}>Save Connection Info</button>
+          </div>
+          <div>
+            Save frames:  <input type="checkbox" checked={this.state.saveFrames} onChange={this.toggleFrameSave} />
+          </div>
+          <div>
+            Save sensors/output state:  <input type="checkbox" checked={this.state.saveIO} onChange={this.toggleIOSave} />
+          </div>
+          <div>
+            Cycle automatically:  <input type="checkbox" checked={this.props.status.autorun} onChange={this.autorunToggle} />
+          </div>
+          <div>
+            Cycle increment:  <input type="number" min="1" value={this.state.stepIncrement} onChange={this.changeIncrement} />
+          </div>
         
-        <div>
-          <button onClick={this.saveState}>Save</button>
-        </div>
-        <div>
-          Save name:  <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
+          <div>
+            <button onClick={this.saveState}>Save</button>
+          </div>
+          <div>
+            Save name:  <input type="text" value={this.state.saveName} onChange={this.changeSaveName} />
+          </div>
+
+          <div>
+            <button onClick={this.loadState}>Load</button>
+          </div>
+          <div>
+            Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
+          </div>
+
+          <div>
+            Directory:  <input type="text" value={this.props.status.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
+          </div>
         </div>
 
         <div>
-          <button onClick={this.loadState}>Load</button>
-        </div>
-        <div>
-          Load name:  <input type="text" value={this.state.loadName} onChange={this.changeLoadName} />
-        </div>
-
-        <div>
-          Directory:  <input type="text" value={this.props.status.directory} onChange={(e) => this.props.changeDirectoryName(e.target.value)} />
+          <NetCreation close={this.closeNewNet} />
+          <br />
+          <SensorCreation close={this.closeNewSensor} />
         </div>
 
         <div>
-          <button onClick={this.toggleNewNet}>Create New</button>
-        </div>
-        {this.state.showNetCreation && <NetCreation close={this.closeNewNet} />}
-
-        <div>
-          <button onClick={this.toggleNewSensor}>Create Sensor</button>
-        </div>
-        {this.state.showSensorCreation && <SensorCreation close={this.closeNewSensor} />}
-
-        <div>
-          <div>Outputs</div>
-          <Outputs />
           <div>Sensors</div>
           <Sensors />
         </div>
+        <div>
+          <div>Outputs</div>
+          <Outputs />
+        </div>
+        <div><LearningRates /></div>
       </div>
     );
   }

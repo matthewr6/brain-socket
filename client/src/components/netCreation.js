@@ -43,7 +43,7 @@ class NetCreation extends Component {
         <div>Y: <input type="number" min="2" value={this.state.y} onChange={this.changeY} /></div>
         <div>Z: <input type="number" min="2" value={this.state.z} onChange={this.changeZ} /></div>
         <div>Randomize: <input type="checkbox" checked={this.state.randomize} onChange={this.toggleRandomize} /></div>
-        <div><button onClick={this.create}>Create</button></div>
+        <div><button onClick={this.create}>Create New Network</button></div>
       </div>
     );
   }

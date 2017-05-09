@@ -6,7 +6,7 @@ import { Router, browserHistory, hashHistory } from 'react-router';
 import store from './store';
 import routes from './routes';
 
-// import './sass/main.scss';
+import './sass/main.scss';
 
 ReactDOM.render(
   <Provider store={store}>
