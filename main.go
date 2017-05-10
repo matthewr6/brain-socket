@@ -24,6 +24,9 @@ func main() {
     directory := "."
     connectionCounts := []int{}
     connectionAvgStrengths := []float64{}
+    noInputCount := []int{}
+    noOutputCount := []int{}
+    isolatedCount := []int{}
     myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
         brain.SensorConstructor{
             Name:"eye",
@@ -66,6 +69,9 @@ func main() {
         EmitToAll(so, "sensorStatuses", sensorStatuses)
         connectionCounts = []int{}
         connectionAvgStrengths = []float64{}
+        noInputCount = []int{}
+        noOutputCount = []int{}
+        isolatedCount = []int{}
     })
     server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
         log.Println("Start creating sensor")
@@ -109,10 +115,14 @@ func main() {
         log.Println("error:", err)
     })
     server.On("historicalConnectionInfo", func(so socketio.Socket) {
-        connectionCountFile, _ := os.Create(fmt.Sprintf("%v/connections/counts.json", directory))
-        countJsonRep, _ := json.MarshalIndent(connectionCounts, "", "    ")
-        connectionCountFile.WriteString(string(countJsonRep))
-        connectionCountFile.Close()
+        // connectionCountFile, _ := os.Create(fmt.Sprintf("%v/connections/counts.json", directory))
+        // countJsonRep, _ := json.MarshalIndent(connectionCounts, "", "    ")
+        // connectionCountFile.WriteString(string(countJsonRep))
+        // connectionCountFile.Close()
+        SaveArrToJSON(directory, "counts", connectionCounts)
+        SaveArrToJSON(directory, "noInputs", noInputCount)
+        SaveArrToJSON(directory, "noOutputs", noOutputCount)
+        SaveArrToJSON(directory, "isolated", isolatedCount)
 
         connectionStrengthFile, _ := os.Create(fmt.Sprintf("%v/connections/strengths.json", directory))
         strengthJsonRep, _ := json.MarshalIndent(connectionAvgStrengths, "", "    ")
@@ -134,9 +144,12 @@ func main() {
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
-            connectionCount, avgStrength := myNet.CountConnections()
+            connectionCount, avgStrength, noInputs, noOutputs, isolated := myNet.CountConnections()
             connectionCounts = append(connectionCounts, connectionCount)
             connectionAvgStrengths = append(connectionAvgStrengths, avgStrength)
+            noInputCount = append(noInputCount, noInputs)
+            noOutputCount = append(noOutputCount, noOutputs)
+            isolatedCount = append(isolatedCount, isolated)
             for name, sensor := range myNet.Sensors {
                 if sensorStatuses[name] {
                     for _, node := range sensor.Nodes {
@@ -208,6 +221,9 @@ func main() {
         EmitToAll(so, "sensorStatuses", sensorStatuses)
         connectionCounts = []int{}
         connectionAvgStrengths = []float64{}
+        noInputCount = []int{}
+        noOutputCount = []int{}
+        isolatedCount = []int{}
     })
 
     http.Handle("/socket.io/", server)

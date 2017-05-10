@@ -3,9 +3,18 @@ package main
 import (
     "github.com/firedrake969/gopher-brain"
 
+    "os"
     "fmt"
     "strings"
+    "encoding/json"
 )
+
+func SaveArrToJSON(directory string, name string, array []int) {
+    f, _ := os.Create(fmt.Sprintf("%v/connections/%v.json", directory, name))
+    jsonRep, _ := json.MarshalIndent(array, "", "    ")
+    f.WriteString(string(jsonRep))
+    f.Close()
+}
 
 func SerializeSensors(net *brain.Network) []string {
     sensorNames := []string{}
