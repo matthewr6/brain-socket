@@ -1,7 +1,7 @@
 package main
 
 import (
-    "github.com/firedrake969/gopher-brain"
+    "github.com/matthewr6/gopher-brain"
     "github.com/googollee/go-socket.io"
 
     "os"
