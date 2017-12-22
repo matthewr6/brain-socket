@@ -12,16 +12,18 @@ class NetCreation extends Component {
       x: 2,
       y: 2,
       z: 2,
+      hemispheres: false,
       randomize: true
     };
     this.create = this.create.bind(this);
     this.changeX = this.changeX.bind(this);
     this.changeY = this.changeY.bind(this);
     this.changeZ = this.changeZ.bind(this);
+    this.toggleHemispheres = this.toggleHemispheres.bind(this);
     this.toggleRandomize = this.toggleRandomize.bind(this);
   }
   create() {
-    this.props.createNew(this.state.x, this.state.y, this.state.z, this.state.randomize);
+    this.props.createNew(this.state.x, this.state.y, this.state.z, this.state.hemispheres, this.state.randomize);
     this.props.close();
   }
   changeX(e) {
@@ -33,8 +35,11 @@ class NetCreation extends Component {
   changeZ(e) {
     this.setState({z: parseInt(e.target.value)});
   }
-  toggleRandomize(e) {
+  toggleHemispheres(e) {
     this.setState({randomize: e.target.checked});
+  }
+  toggleRandomize(e) {
+    this.setState({hemispheres: e.target.checked});
   }
   render() {
     return (
@@ -43,6 +48,7 @@ class NetCreation extends Component {
         <div>Y: <input type="number" min="2" value={this.state.y} onChange={this.changeY} /></div>
         <div>Z: <input type="number" min="2" value={this.state.z} onChange={this.changeZ} /></div>
         <div>Randomize: <input type="checkbox" checked={this.state.randomize} onChange={this.toggleRandomize} /></div>
+        <div>Hemispheres: <input type="checkbox" checked={this.state.hemispheres} onChange={this.toggleHemispheres} /></div>
         <div><button onClick={this.create}>Create New Network</button></div>
       </div>
     );

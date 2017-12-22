@@ -27,30 +27,7 @@ func main() {
     noInputCount := []int{}
     noOutputCount := []int{}
     isolatedCount := []int{}
-    myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{
-        brain.SensorConstructor{
-            Name:"eye",
-            R: 1,
-            Count: 9,
-            Plane: "y",
-            Center: [3]int{8, 0, 12},
-            OutputCount: 5,
-            InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
-                //
-            },
-        },
-        brain.SensorConstructor{
-            Name:"ear",
-            R: 1,
-            Count: 9,
-            Plane: "y",
-            Center: [3]int{8, 8, 12},
-            OutputCount: 3,
-            InputFunc: func(nodes []*brain.Node, influences map[string]*brain.Output) {
-                //
-            },
-        },
-    }, false)
+    myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{}, false, false)
 
 
     sensorStatuses = SerializeSensorStatuses(myNet)
@@ -59,8 +36,8 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    server.On("create", func(so socketio.Socket, x int, y int, z int, randomize bool) {
-        myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{}, randomize)
+    server.On("create", func(so socketio.Socket, x int, y int, z int, hemispheres bool, randomize bool) {
+        myNet = brain.Brain([3]int{x, y, z}, []brain.SensorConstructor{}, hemispheres, randomize)
 
         EmitToAll(so, "cycle", myNet.Frames)
         EmitToAll(so, "outputs", SerializeOutputs(myNet))

@@ -66,6 +66,6 @@ export function createNew(x, y, z, randomize) {
 export function createSensor(state) {
     return function(dispatch, getState) {
         let { socket } = getState();
-        socket.socket.emit('createSensor', state.name, state.radius, state.count, state.plane, state.centerX, state.centerY, state.centerZ, state.outputCount);
+        socket.socket.emit('createSensor', state.name, state.radius, state.count, state.plane, state.centerX, state.centerY, state.centerZ, state.hemispheres, state.outputCount);
     }
 }
