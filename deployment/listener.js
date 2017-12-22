@@ -29,7 +29,7 @@ app.post('/', function (req, res) {
     var event = req.body;
     // make sure it's a push to master
     var repoName = event.repository.full_name.toLowerCase();
-    var repoChecks = ['firedrake969/gopher-brain', 'firedrake969/brain-socket']
+    var repoChecks = ['matthewr6/gopher-brain', 'matthewr6/brain-socket']
     if (repoChecks.indexOf(repoName) > -1 && event.ref === 'refs/heads/master') {
         console.log('Start deployment');
 
