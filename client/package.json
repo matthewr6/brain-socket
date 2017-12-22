@@ -3,8 +3,8 @@
   "version": "1.0.1",
   "description": "web interface for gopher-brain package",
   "main": "app.js",
-  "repository": "https://github.com/firedrake969/brain-socket",
-  "author": "Firedrake969",
+  "repository": "https://github.com/matthewr6/brain-socket",
+  "author": "matthewr6",
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",

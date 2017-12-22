@@ -1,1 +1,1 @@
-Web interface for github.com/firedrake969/gopher-brain with some scripts to get data for visualization
+Web interface for github.com/matthewr6/gopher-brain with some scripts to get data for visualization
