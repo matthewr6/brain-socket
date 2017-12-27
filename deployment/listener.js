@@ -10,8 +10,8 @@ function build() {
     execSync('git pull origin master', {cwd: baseDir});
     execSync('go get -u all');
     execSync('go build', {cwd: baseDir});
-    execSync('npm i', {cwd: `${baseDir}/client`});
-    execSync('webpack', {cwd: `${baseDir}/client`});
+    execSync('npm i', {cwd: baseDir});
+    execSync('node_modules/.bin/webpack', {cwd: baseDir});
 }
 
 build();
