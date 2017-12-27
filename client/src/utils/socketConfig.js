@@ -4,7 +4,7 @@ import { socketConnected, socketDisconnected } from '../actions/socketActions';
 import { cycled, autorunToggled, directoryChanged } from '../actions/actions';
 import { updateOutputs } from '../actions/outputActions';
 import { sensorNames, sensorStatuses, sensorToggled } from '../actions/sensorActions';
-import { learningRatesReceived } from '../actions/learningRateActions';
+import { learningRatesReceived, skewsReceived } from '../actions/parameterActions';
 
 function initializeListeners(socket, dispatch) {
   socket.on('connect', () => {
@@ -40,6 +40,9 @@ function initializeListeners(socket, dispatch) {
   });
   socket.on('learningRates', (rate, probSphere, minConn, maxConn) => {
     dispatch(learningRatesReceived(rate, probSphere, minConn, maxConn));
+  });
+  socket.on('connectionSkew', (axonSkew, minorSkew) => {
+    dispatch(skewsReceived(axonSkew, minorSkew));
   });
 }
 

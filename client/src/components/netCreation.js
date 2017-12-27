@@ -36,10 +36,10 @@ class NetCreation extends Component {
     this.setState({z: parseInt(e.target.value)});
   }
   toggleHemispheres(e) {
-    this.setState({randomize: e.target.checked});
+    this.setState({hemispheres: e.target.checked});
   }
   toggleRandomize(e) {
-    this.setState({hemispheres: e.target.checked});
+    this.setState({randomize: e.target.checked});
   }
   render() {
     return (

@@ -18,17 +18,9 @@ class Outputs extends Component {
             <div>{name}</div>
             <div>
               <div>
-                {this.props.outputs[name].left.map((val, idx) => {
+                {this.props.outputs[name].map((val, idx) => {
                   return (
-                    <div key={`output-${name}-left-${idx}`}>{val}</div>
-                  );
-                })}
-              </div>
-              <br />
-              <div>
-                {this.props.outputs[name].right.map((val, idx) => {
-                  return (
-                    <div key={`output-${name}-right-${idx}`}>{val}</div>
+                    <div key={`output-${name}-${idx}`}>{val}</div>
                   );
                 })}
               </div>
@@ -37,6 +29,23 @@ class Outputs extends Component {
         );
       })
     );
+    /*
+    <div>
+      {this.props.outputs[name].left.map((val, idx) => {
+        return (
+          <div key={`output-${name}-left-${idx}`}>{val}</div>
+        );
+      })}
+    </div>
+    <br />
+    <div>
+      {this.props.outputs[name].right.map((val, idx) => {
+        return (
+          <div key={`output-${name}-right-${idx}`}>{val}</div>
+        );
+      })}
+    </div>
+    */
   }
   render() {
     return (

@@ -27,7 +27,7 @@ func main() {
     noInputCount := []int{}
     noOutputCount := []int{}
     isolatedCount := []int{}
-    myNet := brain.Brain([3]int{12, 25, 25}, []brain.SensorConstructor{}, false, false)
+    myNet := brain.Brain([3]int{12, 12, 12}, []brain.SensorConstructor{}, false, false)
 
 
     sensorStatuses = SerializeSensorStatuses(myNet)
@@ -51,6 +51,7 @@ func main() {
         isolatedCount = []int{}
     })
     server.On("createSensor", func(so socketio.Socket, name string, radius int, count int, plane string, centerX int, centerY int, centerZ int, outputCount int) {
+        fmt.Println("on")
         log.Println("Start creating sensor")
         myNet.CreateSensor(name, radius, count, plane, [3]int{centerX, centerY, centerZ},  outputCount, func(nodes []*brain.Node, influences map[string]*brain.Output) {
             //
@@ -79,6 +80,10 @@ func main() {
             brain.DYNAMIC_SYNAPSE_PROB_SPHERE,
             brain.MIN_CONNECTIONS,
             brain.MAX_CONNECTIONS)
+
+        so.Emit("connectionSkew",
+            brain.AXON_SKEW,
+            brain.DYNAMIC_SYNAPSE_SKEW)
 
         // todo - function in gopher-brain pkg to allow conversion of net to fully JSON-able state
         // sensors := make(map[string]float64)
@@ -118,9 +123,14 @@ func main() {
         })
         EmitToAll(so, "learningRates", rate, probSphere, minConnections, maxConnections)
     })
+    server.On("connectionSkew", func(so socketio.Socket, axonSkew float64, minorSkew float64) {
+        brain.SetSkews(axonSkew, minorSkew)
+        EmitToAll(so, "connectionSkew", axonSkew, minorSkew)    
+    })
     server.On("cycle", func(so socketio.Socket, cycles int, saveFrames bool, saveIO bool) {
         for i := 0; i < cycles; i++ {
             myNet.Cycle()
+
             connectionCount, avgStrength, noInputs, noOutputs, isolated := myNet.CountConnections()
             connectionCounts = append(connectionCounts, connectionCount)
             connectionAvgStrengths = append(connectionAvgStrengths, avgStrength)

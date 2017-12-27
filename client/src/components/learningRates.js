@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setLearningRates } from '../actions/learningRateActions';
+import { setLearningRates } from '../actions/parameterActions';
 
 class LearningRates extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class LearningRates extends Component {
     );
   }
   componentWillReceiveProps(nextProps) {
-    this.setState(nextProps.learningRate);
+    this.setState(nextProps.parameters);
   }
   changeRate(e) {
     this.setState({rate: e.target.value})
@@ -74,7 +74,7 @@ class LearningRates extends Component {
 
 function mapStateToProps(state) {
   return {
-    learningRate: state.learningRate
+    parameters: state.parameters
   };
 }
 

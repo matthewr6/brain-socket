@@ -5,7 +5,6 @@ import (
 
     "os"
     "fmt"
-    "strings"
     "encoding/json"
 )
 
@@ -18,13 +17,13 @@ func SaveArrToJSON(directory string, name string, array []int) {
 
 func SerializeSensors(net *brain.Network) []string {
     sensorNames := []string{}
-    sensorsUsed := make(map[string]bool)
+    // sensorsUsed := make(map[string]bool)
     for name := range net.Sensors {
-        baseName := name[0:len(name)-4]
-        if _, exists := sensorsUsed[baseName]; !exists {
-            sensorNames = append(sensorNames, baseName)
-            sensorsUsed[baseName] = true
-        }
+        // baseName := name[0:len(name)-4]
+        // if _, exists := sensorsUsed[baseName]; !exists {
+        sensorNames = append(sensorNames, name)
+        //     sensorsUsed[baseName] = true
+        // }
     }
     return sensorNames
 }
@@ -38,7 +37,7 @@ func SerializeSensorStatuses(net *brain.Network) map[string]bool {
     return sensorStatuses
 }
 
-func SerializeOutputs(net *brain.Network) map[string]map[string][]float64 {
+func SerializeOutputs(net *brain.Network) map[string][]float64 {
     // todo possibly refactor brain structure to allow for references from sensor to brain?
     outputSubLevel := map[string][]float64{}
     outputsUsed := make(map[string]bool)
@@ -61,18 +60,20 @@ func SerializeOutputs(net *brain.Network) map[string]map[string][]float64 {
         }
     }
 
-    outputsUsed = make(map[string]bool)
-    // todo - use left/right keys instead of array?
-    outputs := make(map[string]map[string][]float64)
-    for name, _ := range outputSubLevel {
-        baseName := strings.Split(name, "-")[0]
-        if _, exists := outputsUsed[baseName]; !exists {
-            outputs[baseName] = map[string][]float64{
-                "left": outputSubLevel[fmt.Sprintf("%v-one", baseName)],
-                "right": outputSubLevel[fmt.Sprintf("%v-two", baseName)],
-            }
-            outputsUsed[baseName] = true
-        }
-    }
-    return outputs
+    return outputSubLevel
+
+    // outputsUsed = make(map[string]bool)
+    // // todo - use left/right keys instead of array?
+    // outputs := make(map[string]map[string][]float64)
+    // for name, _ := range outputSubLevel {
+    //     baseName := strings.Split(name, "-")[0]
+    //     if _, exists := outputsUsed[baseName]; !exists {
+    //         outputs[baseName] = map[string][]float64{
+    //             "left": outputSubLevel[fmt.Sprintf("%v-one", baseName)],
+    //             "right": outputSubLevel[fmt.Sprintf("%v-two", baseName)],
+    //         }
+    //         outputsUsed[baseName] = true
+    //     }
+    // }
+    // return outputs
 }

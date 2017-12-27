@@ -6,15 +6,15 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './client/src/app.js',
   output: {
-    path: path.resolve(__dirname + '/build'),
+    path: path.resolve(__dirname + '/client/build'),
     filename: 'bundle.js',
     publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'index.tpl.html'),
+      template: path.resolve(__dirname, 'client/index.tpl.html'),
       title: 'DIR-S',
       showErrors: true,
       publicPath: '/',

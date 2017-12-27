@@ -4,14 +4,14 @@ import outputReducer from './outputReducer';
 import socketReducer from './socketReducer';
 import statusReducer from './statusReducer';
 import sensorReducer from './sensorReducer';
-import learningRateReducer from './learningRateReducer';
+import parameterReducer from './parameterReducer';
 
 const rootReducer = combineReducers({
     outputs: outputReducer,
     socket: socketReducer,
     status: statusReducer,
     sensors: sensorReducer,
-    learningRate: learningRateReducer,
+    parameters: parameterReducer,
 });
 
 export default rootReducer;

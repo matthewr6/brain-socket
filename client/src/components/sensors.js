@@ -19,14 +19,16 @@ class Sensors extends Component {
         return (
           <div key={`sensor-${name}`}>
             <div>
-              {name}
-              <div>one <input type="checkbox" checked={sensors.statuses[`${name}-one`]} onChange={(e) => this.props.toggleSensor(`${name}-one`, e.target.checked)} /></div>
-              <div>two <input type="checkbox" checked={sensors.statuses[`${name}-two`]} onChange={(e) => this.props.toggleSensor(`${name}-two`, e.target.checked)} /></div>
+              <div>{name} <input type="checkbox" checked={sensors.statuses[name]} onChange={(e) => this.props.toggleSensor(name, e.target.checked)} /></div>
             </div>
           </div>
         );
       })
     );
+    /*
+    <div>one <input type="checkbox" checked={sensors.statuses[`${name}-one`]} onChange={(e) => this.props.toggleSensor(`${name}-one`, e.target.checked)} /></div>
+    <div>two <input type="checkbox" checked={sensors.statuses[`${name}-two`]} onChange={(e) => this.props.toggleSensor(`${name}-two`, e.target.checked)} /></div>
+    */
   }
   render() {
     return (

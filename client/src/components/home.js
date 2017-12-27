@@ -9,6 +9,7 @@ import Sensors from './sensors';
 import NetCreation from './netCreation';
 import SensorCreation from './sensorCreation';
 import LearningRates from './learningRates';
+import Skews from './skewRates';
 
 class Home extends Component {
   constructor(props) {
@@ -132,6 +133,7 @@ class Home extends Component {
           <Outputs />
         </div>
         <div><LearningRates /></div>
+        <div><Skews /></div>
       </div>
     );
   }
